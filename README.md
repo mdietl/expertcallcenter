@@ -1,4 +1,4 @@
-# stock-ex
+# Expert Call Center
 A project for WMPM TU Wien
 
 #Running Apps:

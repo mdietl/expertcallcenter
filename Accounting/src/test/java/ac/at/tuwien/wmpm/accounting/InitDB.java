@@ -1,4 +1,4 @@
-package ac.at.tuwien.wmpm.experts;
+package ac.at.tuwien.wmpm.accounting;
 
 import ac.at.tuwien.wmpm.domain.model.User;
 import ac.at.tuwien.wmpm.domain.repository.UserRepository;

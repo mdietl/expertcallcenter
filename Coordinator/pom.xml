@@ -13,7 +13,7 @@
 
 
     <properties>
-        <camel.version>2.15.0</camel.version>
+        <camel.version>2.15.2</camel.version>
     </properties>
 
     <dependencies>
@@ -70,6 +70,25 @@
             <artifactId>camel-facebook</artifactId>
             <version>${camel.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-spring</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mx.bigdata.jcalais</groupId>
+            <artifactId>j-calais</artifactId>
+            <version>1.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

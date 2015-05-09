@@ -28,6 +28,10 @@ public class CommonRabbitConfiguration {
     /** The Constant TEST_QUEUE. */
     public static final String TEST_QUEUE =  "testQueue";
 
+    public static final String INCOMING_REQUEST_VALIDATION = "incomingRequestValidation";
+
+    public static final String INCOMING_REQUEST_VALIDATION_RESPONSE = "incomingRequestValidationResponse";
+
 
     /** The uuid. */
     public static UUID uuid;
@@ -57,10 +61,10 @@ public class CommonRabbitConfiguration {
      * @param connectionFactory the connection factory
      * @return the rabbit transaction manager
      */
-    @Bean
+   /* @Bean
     public RabbitTransactionManager rabbitTransactionManager(ConnectionFactory connectionFactory) {
         return new RabbitTransactionManager(connectionFactory);
-    }
+    }*/
 
     /**
      * Rabbit listener container factory.
@@ -124,6 +128,29 @@ public class CommonRabbitConfiguration {
     @Bean
     public Binding testQueueBinding(TopicExchange exchange) {
         return BindingBuilder.bind(testQueue()).to(exchange).with(testQueue().getName());
+    }
+
+
+    @Bean
+    public Queue incomingRequestValidtionQueue() {
+        Queue queue = new Queue(INCOMING_REQUEST_VALIDATION);
+        return queue;
+    }
+
+    @Bean
+    public Binding incomingRequestValidtionQueueBinding(TopicExchange exchange) {
+        return BindingBuilder.bind(incomingRequestValidtionQueue()).to(exchange).with(incomingRequestValidtionQueue().getName());
+    }
+
+    @Bean
+    public Queue incomingRequestValidtionResponseQueue() {
+        Queue queue = new Queue(INCOMING_REQUEST_VALIDATION_RESPONSE);
+        return queue;
+    }
+
+    @Bean
+    public Binding incomingRequestValidtionResponseQueueBinding(TopicExchange exchange) {
+        return BindingBuilder.bind(incomingRequestValidtionResponseQueue()).to(exchange).with(incomingRequestValidtionResponseQueue().getName());
     }
 
     /**

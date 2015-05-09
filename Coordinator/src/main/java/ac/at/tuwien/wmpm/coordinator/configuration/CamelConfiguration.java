@@ -1,5 +1,6 @@
 package ac.at.tuwien.wmpm.coordinator.configuration;
 
+import ac.at.tuwien.wmpm.coordinator.routes.IncomingRequestRoute;
 import ac.at.tuwien.wmpm.coordinator.routes.MainRoute;
 import org.apache.camel.spring.SpringCamelContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,14 @@ public class CamelConfiguration {
     @Autowired
     private MainRoute mainRoute;
 
+    @Autowired
+    private IncomingRequestRoute incomingRequestRoute;
+
     @Bean
     public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
-        System.out.println("TEST TEST");
         SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
         camelContext.addRoutes(mainRoute);
+        camelContext.addRoutes(incomingRequestRoute);
 
         return camelContext;
     }

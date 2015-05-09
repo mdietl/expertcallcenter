@@ -15,8 +15,14 @@ public class Account {
     @Column(unique = true)
     private String email;
 
+    public Account() {}
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -26,7 +32,5 @@ public class Account {
                 '}';
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+
 }

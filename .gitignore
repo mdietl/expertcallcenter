@@ -22,3 +22,4 @@ target/
 
 # Project specific
 database/
+Coordinator/src/main/resources/custom.properties.temp

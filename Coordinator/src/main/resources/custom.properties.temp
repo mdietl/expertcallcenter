@@ -1,0 +1,2 @@
+#rename file to custom.properties to override default.properties
+incomingrequest.mail.credentials=imaps://imap.gmail.com?username=expertcallcenter.wmpm.2015@gmail.com&password=expertcallcenter.wmpm

@@ -10,12 +10,18 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 /**
  * Created by dietl_ma on 21/04/15.
  */
 @SpringBootApplication
 @Import({CamelConfiguration.class, CommonRabbitConfiguration.class})
+@PropertySources({
+        @PropertySource(value = "classpath:default.properties", ignoreResourceNotFound = true),
+        @PropertySource(value = "classpath:custom.properties", ignoreResourceNotFound = true)
+})
 public class CoordinatorApp extends SpringBootServletInitializer {
 
     /** The Constant logger. */

@@ -12,7 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Created by dietl_ma on 09/05/15.
@@ -29,14 +32,18 @@ public class IncomingRequestRoute extends RouteBuilder {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Value("${incomingrequest.mail.credentials}")
+    private String mailCredentials;
+
+
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(IncomingRequestRoute.class);
+
     @Override
     public void configure() throws Exception {
 
         //consume mail
-        from("imaps://imap.gmail.com?username=expertcallcenter.wmpm.2015@gmail.com&password=expertcallcenter.wmpm"
-                + "&delete=false&unseen=true&consumer.delay=30000&subject=Camel")
+        from(mailCredentials + "&delete=false&unseen=true&consumer.delay=30000")
             .process(incomingRequestProcessor)
             .to("direct:incomingRequest");
 

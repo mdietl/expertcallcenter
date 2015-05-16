@@ -15,23 +15,23 @@ import java.util.UUID;
 /**
  * Created by dietl_ma on 09/05/15.
  */
-@RunWith(CamelSpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-        loader = CamelSpringDelegatingTestContextLoader.class
-)
-@MockEndpoints
+//@RunWith(CamelSpringJUnit4ClassRunner.class)
+//@ContextConfiguration(
+//        loader = CamelSpringDelegatingTestContextLoader.class
+//)
+//@MockEndpoints
 public class IncomingRequestTest {
 
-    @Produce(uri = "direct:incomingRequest")
-    protected ProducerTemplate testProducer;
-
-    @Test
-    public void testRequest() throws InterruptedException {
-
-        IncomingRequest ir = new IncomingRequest(UUID.randomUUID());
-        ir.setTitle("Test title");
-        ir.setMail("mdietl83@gmail.com");
-        ir.setQuestion("my question");
-        testProducer.sendBody(ir);
-    }
+//    @Produce(uri = "direct:incomingRequest")
+//    protected ProducerTemplate testProducer;
+//
+//    @Test
+//    public void testRequest() throws InterruptedException {
+//
+//        IncomingRequest ir = new IncomingRequest(UUID.randomUUID());
+//        ir.setTitle("Test title");
+//        ir.setMail("mdietl83@gmail.com");
+//        ir.setQuestion("my question");
+//        testProducer.sendBody(ir);
+//    }
 }

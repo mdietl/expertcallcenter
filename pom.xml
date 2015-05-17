@@ -22,6 +22,7 @@
         <module>Domain</module>
         <module>Accounting</module>
 	    <module>Monitoring</module>
+        <module>Experts</module>
     </modules>
 
 

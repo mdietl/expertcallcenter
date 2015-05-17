@@ -23,7 +23,7 @@ public class CamelConfiguration {
     @Bean
     public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
         SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
-        camelContext.addRoutes(mainRoute);
+//        camelContext.addRoutes(mainRoute);
         camelContext.addRoutes(incomingRequestRoute);
 
         return camelContext;

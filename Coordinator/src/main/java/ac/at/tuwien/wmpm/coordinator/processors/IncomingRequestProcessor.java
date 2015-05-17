@@ -30,6 +30,8 @@ public class IncomingRequestProcessor implements Processor {
         ir.setMail(parseFrom(exchange.getIn().getHeader("From").toString()));
         ir.setQuestion(exchange.getIn().getBody(String.class));
 
+        logger.info("Incoming Request processed, IR: " + ir);
+
         exchange.getIn().setBody(ir, IncomingRequest.class);
     }
 

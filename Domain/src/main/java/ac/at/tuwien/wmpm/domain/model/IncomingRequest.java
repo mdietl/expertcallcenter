@@ -92,7 +92,7 @@ public class IncomingRequest {
                 "id=" + id +
                 ", mail='" + mail + '\'' +
                 ", title='" + title + '\'' +
-                ", question='" + question + '\'' +
+                ", question='" + question.substring(0, question.length() <= 15 ? question.length() : 15).replaceAll("(\\r|\\n)", "") + '\'' +
                 '}';
     }
 }

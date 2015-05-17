@@ -43,12 +43,17 @@ public class IncomingRequestRoute extends RouteBuilder {
     public void configure() throws Exception {
 
         //consume mail
-        from(mailCredentials + "&delete=false&unseen=true&consumer.delay=30000")
+        from(mailCredentials + "&delete=false&unseen=true&consumer.delay=10000")
+            .routeId("RouteMailPoller")
+            .log("from mail server")
             .process(incomingRequestProcessor)
-            .to("direct:incomingRequest");
+            .to("direct:incomingRequest")
+            .log("to incomingRequest");
 
         //send message to accounting app to validate request
         from("direct:incomingRequest")
+            .routeId("RouteIncomingRequestBuilder")
+            .log("from incomingRequest")
             .process(new Processor() {
                 @Override
                 public void process(Exchange exchange) throws Exception {
@@ -56,16 +61,19 @@ public class IncomingRequestRoute extends RouteBuilder {
                     IncomingRequest ir = (IncomingRequest) exchange.getIn().getBody();
                     rabbitTemplate.convertAndSend(CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION, ir);
                 }
-            });
+            })
+            .log("to rabbitmq:incomingRequestValidation");
 
         //consume validation result
         from("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidationResponse&exchangeType=topic&durable=true&autoDelete=false")
+            .routeId("RouteMailEnricher")
+            .log("from rabbitmq:incomingRequestValidationResponse")
             .unmarshal().json(JsonLibrary.Jackson, IncomingRequest.class)
             .choice()
                 .when(simple("${body.valid} == true"))
-                    .log("IS_VALID")
+                    .log("incomingRequestValidationResponse body is valid")
                     .process(enrichWithCategoriesProcessor)
                 .otherwise()
-                    .log("IS_NOT_VALID");
+                    .log("incomingRequestValidationResponse body is not valid");
     }
 }

@@ -38,13 +38,13 @@ public class EnrichWithCategoriesProcessor implements Processor {
         CalaisClient calaisClient = new CalaisRestClient(apiKey);
         CalaisResponse calaisResponse = calaisClient.analyze(ir.getQuestion());
 
-        for (CalaisObject tags : calaisResponse.getSocialTags()){
-            System.out.println(tags.getField("_typeGroup") + ":"
-                    + tags.getField("name"));
+        for (CalaisObject tag : calaisResponse.getSocialTags()){
+            System.out.println(tag.getField("_typeGroup") + ":"
+                    + tag.getField("name"));
 
-            logger.info("FOUND TAG:" + tags.getField("name"));
-
-            ir.getCategories().add(tags.getField("name"));
+            ir.getCategories().add(tag.getField("name"));
         }
+
+        logger.info("processed mail and found tags: " + ir.getCategories());
     }
 }

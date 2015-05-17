@@ -48,12 +48,12 @@ public class IncomingRequestRoute extends RouteBuilder {
             .log("from mail server")
             .process(incomingRequestProcessor)
             .to("direct:incomingRequest")
-            .log("to incomingRequest");
+            .log("to direct:incomingRequest");
 
         //send message to accounting app to validate request
         from("direct:incomingRequest")
             .routeId("RouteIncomingRequestBuilder")
-            .log("from incomingRequest")
+            .log("from direct:incomingRequest")
             .process(new Processor() {
                 @Override
                 public void process(Exchange exchange) throws Exception {
@@ -62,7 +62,7 @@ public class IncomingRequestRoute extends RouteBuilder {
                     rabbitTemplate.convertAndSend(CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION, ir);
                 }
             })
-            .log("to rabbitmq:incomingRequestValidation");
+            .log("to rabbitmq:" + CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION);
 
         //consume validation result
         from("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidationResponse&exchangeType=topic&durable=true&autoDelete=false")

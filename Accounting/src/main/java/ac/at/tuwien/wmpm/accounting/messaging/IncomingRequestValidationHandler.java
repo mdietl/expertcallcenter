@@ -4,6 +4,8 @@ import ac.at.tuwien.wmpm.domain.configuration.CommonRabbitConfiguration;
 import ac.at.tuwien.wmpm.domain.model.IncomingRequest;
 import ac.at.tuwien.wmpm.domain.model.User;
 import ac.at.tuwien.wmpm.domain.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -25,21 +27,25 @@ public class IncomingRequestValidationHandler {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    private static final Logger logger = LoggerFactory.getLogger(IncomingRequestValidationHandler.class);
 
     public void handleMessage(IncomingRequest ir) throws MessagingException {
 
-        User u = userRepository.findByEmail(ir.getMail());
+        logger.info("handle msg: " + ir);
 
-        if (u == null) {
+        User user = userRepository.findByEmail(ir.getMail());
+
+        if (user == null) {
+            logger.info("user not found. create new user...");
             User newUser = new User();
             newUser.setEmail(ir.getMail());
             userRepository.save(newUser);
-            u = newUser;
         }
 
         //do some validation stuff
         ir.setValid(true);
 
         rabbitTemplate.convertAndSend(CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION_RESPONSE, ir);
+        logger.info("to rabbitmq:" + CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION_RESPONSE);
     }
 }

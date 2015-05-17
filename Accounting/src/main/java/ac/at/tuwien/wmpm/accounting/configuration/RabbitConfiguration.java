@@ -40,7 +40,7 @@ public class RabbitConfiguration {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.setMessageConverter(messageConverter);
-        container.setQueues((Queue)applicationContext.getBean("incomingRequestValidtionQueue"));
+        container.setQueues((Queue)applicationContext.getBean("incomingRequestValidationQueue"));
 
         MessageListenerAdapter adapter = new MessageListenerAdapter(incomingRequestValidationHandler, messageConverter);
         adapter.setMessageConverter(messageConverter);

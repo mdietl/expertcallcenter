@@ -9,7 +9,6 @@ import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFacto
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.transaction.RabbitTransactionManager;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,14 +131,14 @@ public class CommonRabbitConfiguration {
 
 
     @Bean
-    public Queue incomingRequestValidtionQueue() {
+    public Queue incomingRequestValidationQueue() {
         Queue queue = new Queue(INCOMING_REQUEST_VALIDATION);
         return queue;
     }
 
     @Bean
     public Binding incomingRequestValidtionQueueBinding(TopicExchange exchange) {
-        return BindingBuilder.bind(incomingRequestValidtionQueue()).to(exchange).with(incomingRequestValidtionQueue().getName());
+        return BindingBuilder.bind(incomingRequestValidationQueue()).to(exchange).with(incomingRequestValidationQueue().getName());
     }
 
     @Bean

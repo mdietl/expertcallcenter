@@ -1,7 +1,8 @@
-package ac.at.tuwien.wmpm.accounting.configuration;
+package ac.at.tuwien.wmpm.experts.configuration;
 
 import ac.at.tuwien.wmpm.domain.configuration.CommonRabbitConfiguration;
-import ac.at.tuwien.wmpm.accounting.messaging.MessageHandler;
+import ac.at.tuwien.wmpm.experts.messaging.MessageHandler;
+
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

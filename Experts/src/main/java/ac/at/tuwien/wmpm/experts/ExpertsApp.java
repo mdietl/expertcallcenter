@@ -1,4 +1,4 @@
-package ac.at.tuwien.wmpm.accounting;
+package ac.at.tuwien.wmpm.experts;
 
 import ac.at.tuwien.wmpm.domain.configuration.CommonRabbitConfiguration;
 import org.slf4j.Logger;

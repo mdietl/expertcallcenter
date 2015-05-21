@@ -82,10 +82,9 @@ public class IncomingRequestRoute extends RouteBuilder {
                     .process(enrichWithCategoriesProcessor)
                     .log("incomingRequest enriched by tags")
                     //send confirmation mail
-                    .wireTap("direct:incomingRequestConfirmation")
-                    .end()
+                    .wireTap("direct:incomingRequestConfirmation").end()
                     //.process(saveIncomingRequestProcessor)
-                    .to("jpa:ac.at.tuwien.wmpm.domain.model.IncomingRequest")
+                    .to("jpa:" + IncomingRequest.class.getCanonicalName())
                     .log("incomingRequest saved to db")
                 //TODO: Foward messge to expert application
                 .otherwise()

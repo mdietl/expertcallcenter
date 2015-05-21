@@ -8,5 +8,5 @@ import ac.at.tuwien.wmpm.domain.model.User;
  */
 public interface ExpertRepository extends IGenericRepository<Expert, String> {
 
-    public User findByEmail(String email);
+    public Expert findByEmail(String email);
 }

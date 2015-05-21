@@ -2,6 +2,7 @@ package ac.at.tuwien.wmpm.coordinator.routes;
 
 import ac.at.tuwien.wmpm.coordinator.processors.EnrichWithCategoriesProcessor;
 import ac.at.tuwien.wmpm.coordinator.processors.IncomingRequestProcessor;
+import ac.at.tuwien.wmpm.coordinator.processors.SaveIncomingRequestProcessor;
 import ac.at.tuwien.wmpm.domain.configuration.CommonRabbitConfiguration;
 import ac.at.tuwien.wmpm.domain.model.IncomingRequest;
 import org.apache.camel.Exchange;
@@ -30,10 +31,16 @@ public class IncomingRequestRoute extends RouteBuilder {
     private EnrichWithCategoriesProcessor enrichWithCategoriesProcessor;
 
     @Autowired
+    private SaveIncomingRequestProcessor saveIncomingRequestProcessor;
+
+    @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Value("${incomingrequest.mail.credentials}")
     private String mailCredentials;
+
+    @Value("${smtp.mail.credentials}")
+    private String smtpCredentials;
 
 
     /** The Constant logger. */
@@ -73,7 +80,28 @@ public class IncomingRequestRoute extends RouteBuilder {
                 .when(simple("${body.valid} == true"))
                     .log("incomingRequestValidationResponse body is valid")
                     .process(enrichWithCategoriesProcessor)
+                    .log("incomingRequest enriched by tags")
+                    //send confirmation mail
+                    .wireTap("direct:incomingRequestConfirmation")
+                    .end()
+                    .process(saveIncomingRequestProcessor)
+                    .log("incomingRequest saved to db")
+                //TODO: Foward messge to expert application
                 .otherwise()
-                    .log("incomingRequestValidationResponse body is not valid");
+                    .log("incomingRequestValidationResponse body is not valid")
+                    .setHeader("Subject", constant("Expert Callcenter WMPM"))
+                    .setHeader("To", simple("${body.mail}"))
+                    //.setBody("Your request was not valid"))
+                    .transform().simple("Your request was not valid!\n\n Your question:\n//${body.question}//")
+                    .to(smtpCredentials);
+
+        //send confirmation mail
+        from("direct:incomingRequestConfirmation")
+            .log("incomingRequestValidationResponse body is not valid")
+            .setHeader("Subject", constant("Expert Callcenter WMPM"))
+            .setHeader("To", simple("${body.mail}"))
+                    //.setBody("Your request was not valid"))
+            .transform().simple("Your request is valid!\n\n Your question:\n//${body.question}//")
+            .to(smtpCredentials);
     }
 }

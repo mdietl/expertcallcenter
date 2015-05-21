@@ -37,13 +37,20 @@ public class IncomingRequestValidationHandler {
 
         if (user == null) {
             logger.info("user not found. create new user...");
-            User newUser = new User();
-            newUser.setEmail(ir.getMail());
-            userRepository.save(newUser);
+            user = new User();
+            user.setEmail(ir.getMail());
         }
+
 
         //do some validation stuff
         ir.setValid(true);
+        if (user.getSentQuestions()-2 >= (user.getPaidAnswers()))
+            ir.setValid(false);
+        else
+            user.setSentQuestions(user.getSentQuestions()+1);
+
+        userRepository.save(user);
+
 
         rabbitTemplate.convertAndSend(CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION_RESPONSE, ir);
         logger.info("to rabbitmq:" + CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION_RESPONSE);

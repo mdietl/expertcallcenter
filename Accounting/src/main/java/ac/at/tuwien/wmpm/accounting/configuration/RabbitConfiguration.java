@@ -17,7 +17,7 @@ import org.springframework.messaging.MessageHandler;
 /**
  * Created by dietl_ma on 21/04/15.
  */
-@Configuration
+//@Configuration
 public class RabbitConfiguration {
 
     /** The application context. */
@@ -35,7 +35,7 @@ public class RabbitConfiguration {
      * @param messageConverter
      * @return
      */
-    @Bean
+//    @Bean
     public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory, RabbitTemplate amqpTemplate, MessageConverter messageConverter) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);

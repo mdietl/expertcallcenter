@@ -30,6 +30,15 @@ public class IncomingRequest {
 
     private ArrayList<String> categories = new ArrayList<String>();
 
+    private long Counter;
+
+    public long getCounter() {
+        return Counter;
+    }
+
+    public void setCounter(long counter) {
+        Counter = counter;
+    }
 
     public IncomingRequest() {}
 

@@ -50,7 +50,7 @@ public class IncomingRequestValidationHandler {
             user.setSentQuestions(user.getSentQuestions()+1);
 
         userRepository.save(user);
-
+        //ir.setValid(true);
 
         rabbitTemplate.convertAndSend(CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION_RESPONSE, ir);
         logger.info("to rabbitmq:" + CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION_RESPONSE);

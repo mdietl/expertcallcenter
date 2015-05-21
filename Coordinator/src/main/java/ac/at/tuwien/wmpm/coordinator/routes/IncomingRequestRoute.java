@@ -84,7 +84,8 @@ public class IncomingRequestRoute extends RouteBuilder {
                     //send confirmation mail
                     .wireTap("direct:incomingRequestConfirmation")
                     .end()
-                    .process(saveIncomingRequestProcessor)
+                    //.process(saveIncomingRequestProcessor)
+                    .to("jpa:ac.at.tuwien.wmpm.domain.model.IncomingRequest")
                     .log("incomingRequest saved to db")
                 //TODO: Foward messge to expert application
                 .otherwise()

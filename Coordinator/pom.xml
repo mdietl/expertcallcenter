@@ -84,6 +84,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jpa</artifactId>
+            <version>${camel.version}</version>
+            <!-- use the same version as your Camel core version -->
+        </dependency>
+
+        <dependency>
             <groupId>mx.bigdata.jcalais</groupId>
             <artifactId>j-calais</artifactId>
             <version>1.0</version>

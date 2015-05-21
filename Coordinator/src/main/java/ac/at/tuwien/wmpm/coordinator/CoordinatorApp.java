@@ -8,16 +8,20 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
  * Created by dietl_ma on 21/04/15.
  */
 @SpringBootApplication
 @Import({CamelConfiguration.class, CommonRabbitConfiguration.class})
+@EntityScan("ac.at.tuwien.wmpm.domain.model")
+@EnableJpaRepositories({"ac.at.tuwien.wmpm.domain.repository"})
 @PropertySources({
         @PropertySource(value = "classpath:default.properties", ignoreResourceNotFound = true),
         @PropertySource(value = "classpath:custom.properties", ignoreResourceNotFound = true)

@@ -24,6 +24,7 @@ public class IncomingRequest {
 
     private String title;
 
+    @Column(length = 10000)
     private String question;
 
     private Boolean valid = false;

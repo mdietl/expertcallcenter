@@ -11,27 +11,27 @@ import java.util.List;
 @Entity
 public class Category {
 
-    @Id
-    @NotNull
-    @Column(unique = true)
-    private String name;
+  @Id
+  @NotNull
+  @Column(unique = true)
+  private String name;
 
-    @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
-    private List<Expert> experts = new ArrayList<Expert>();
+  @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
+  private List<Expert> experts = new ArrayList<Expert>();
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public List<Expert> getExperts() {
-        return experts;
-    }
+  public List<Expert> getExperts() {
+    return experts;
+  }
 
-    public void setExperts(List<Expert> experts) {
-        this.experts = experts;
-    }
+  public void setExperts(List<Expert> experts) {
+    this.experts = experts;
+  }
 }

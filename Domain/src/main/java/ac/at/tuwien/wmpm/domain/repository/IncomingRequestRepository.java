@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 @Repository
 @Transactional
-public interface IncomingRequestRepository  extends IGenericRepository<IncomingRequest, String> {
+public interface IncomingRequestRepository extends IGenericRepository<IncomingRequest, String> {
 
-    public IncomingRequest findById(UUID id);
+  public IncomingRequest findById(UUID id);
 }

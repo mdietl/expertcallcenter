@@ -10,5 +10,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public interface CategoryRepository extends IGenericRepository<Category, String> {
-    public Category findByName(String name);
+  public Category findByName(String name);
 }

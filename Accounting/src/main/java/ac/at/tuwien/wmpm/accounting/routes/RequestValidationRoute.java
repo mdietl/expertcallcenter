@@ -23,13 +23,13 @@ public class RequestValidationRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidation&exchangeType=topic&durable=true&autoDelete=false")
+        from("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidation&routingKey=incomingRequestValidation&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
             .routeId("RequestValidationRoute")
             .log("from rabbitmq:incomingRequestValidation")
             .unmarshal().json(JsonLibrary.Jackson, IncomingRequest.class)
             .process(requestValidationProcessor)
             .marshal().json(JsonLibrary.Jackson)
-            .to("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidationResponse&exchangeType=topic&durable=true&autoDelete=false")
+            .to("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidationResponse&routingKey=incomingRequestValidationResponse&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
             .log("to rabbitmq:incomingRequestValidationResponse");
     }
 

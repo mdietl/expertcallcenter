@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CamelConfiguration {
 
-    @Autowired
-    private RequestValidationRoute requestValidationRoute;
+  @Autowired
+  private RequestValidationRoute requestValidationRoute;
 
-    @Bean
-    public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
-        SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
-        camelContext.addRoutes(requestValidationRoute);
+  @Bean
+  public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
+    SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
+    camelContext.addRoutes(requestValidationRoute);
 
-        return camelContext;
-    }
+    return camelContext;
+  }
 }

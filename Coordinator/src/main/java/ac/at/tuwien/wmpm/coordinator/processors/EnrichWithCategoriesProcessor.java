@@ -10,12 +10,7 @@ import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 /**
  * Created by dietl_ma on 09/05/15.
@@ -23,28 +18,27 @@ import java.util.Arrays;
 @Component
 public class EnrichWithCategoriesProcessor implements Processor {
 
-    @Value("${opencalais.apiKey}")
-    private String apiKey;
+  @Value("${opencalais.apiKey}")
+  private String apiKey;
 
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(EnrichWithCategoriesProcessor.class);
+  /** The Constant logger. */
+  private static final Logger logger = LoggerFactory.getLogger(EnrichWithCategoriesProcessor.class);
 
-    @Override
-    public void process(Exchange exchange) throws Exception {
+  @Override
+  public void process(Exchange exchange) throws Exception {
 
-        //enrich message with tags
-        IncomingRequest ir = (IncomingRequest) exchange.getIn().getBody();
+    // enrich message with tags
+    IncomingRequest ir = (IncomingRequest) exchange.getIn().getBody();
 
-        CalaisClient calaisClient = new CalaisRestClient(apiKey);
-        CalaisResponse calaisResponse = calaisClient.analyze(ir.getQuestion());
+    CalaisClient calaisClient = new CalaisRestClient(apiKey);
+    CalaisResponse calaisResponse = calaisClient.analyze(ir.getQuestion());
 
-        for (CalaisObject tag : calaisResponse.getSocialTags()){
-            System.out.println(tag.getField("_typeGroup") + ":"
-                    + tag.getField("name"));
+    for (CalaisObject tag : calaisResponse.getSocialTags()) {
+      logger.info(tag.getField("_typeGroup") + ":" + tag.getField("name"));
 
-            ir.getCategories().add(tag.getField("name"));
-        }
-
-        logger.info("processed mail and found tags: " + ir.getCategories());
+      ir.getCategories().add(tag.getField("name"));
     }
+
+    logger.info("processed mail and found tags: " + ir.getCategories());
+  }
 }

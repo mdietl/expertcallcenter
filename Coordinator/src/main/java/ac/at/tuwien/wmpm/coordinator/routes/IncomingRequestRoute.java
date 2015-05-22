@@ -19,77 +19,79 @@ import org.springframework.stereotype.Service;
 @Service
 public class IncomingRequestRoute extends RouteBuilder {
 
-    @Autowired
-    private IncomingRequestProcessor incomingRequestProcessor;
+  @Autowired
+  private IncomingRequestProcessor incomingRequestProcessor;
 
-    @Autowired
-    private EnrichWithCategoriesProcessor enrichWithCategoriesProcessor;
+  @Autowired
+  private EnrichWithCategoriesProcessor enrichWithCategoriesProcessor;
 
-    @Autowired
-    private SaveIncomingRequestProcessor saveIncomingRequestProcessor;
+  @Autowired
+  private SaveIncomingRequestProcessor saveIncomingRequestProcessor;
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+  @Autowired
+  private RabbitTemplate rabbitTemplate;
 
-    @Value("${incomingrequest.mail.credentials}")
-    private String mailCredentials;
+  @Value("${incomingrequest.mail.credentials}")
+  private String mailCredentials;
 
-    @Value("${smtp.mail.credentials}")
-    private String smtpCredentials;
+  @Value("${smtp.mail.credentials}")
+  private String smtpCredentials;
 
 
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(IncomingRequestRoute.class);
+  /** The Constant logger. */
+  private static final Logger logger = LoggerFactory.getLogger(IncomingRequestRoute.class);
 
-    @Override
-    public void configure() throws Exception {
+  @Override
+  public void configure() throws Exception {
 
-        //consume mail
-        from(mailCredentials + "&delete=false&unseen=true&consumer.delay=10000")
-            .routeId("RouteMailPoller")
-            .log("from mail server")
-            .process(incomingRequestProcessor)
-            .to("direct:incomingRequest")
-            .log("to direct:incomingRequest");
+    logger.info("Incoming Request Route called...");
+    
+    // consume mail
+    from(mailCredentials + "&delete=false&unseen=true&consumer.delay=10000")
+        .routeId("RouteMailPoller").log("from mail server").process(incomingRequestProcessor)
+        .to("direct:incomingRequest").log("to direct:incomingRequest");
 
-        //send message to accounting app to validate request
-        from("direct:incomingRequest")
-            .routeId("RouteIncomingRequestBuilder")
-            .marshal().json(JsonLibrary.Jackson)
-            .to("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidation&routingKey=incomingRequestValidation&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
-            .log("to rabbitmq:incomingRequestValidation");
+    // send message to accounting app to validate request
+    from("direct:incomingRequest")
+        .routeId("RouteIncomingRequestBuilder")
+        .marshal()
+        .json(JsonLibrary.Jackson)
+        .to("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidation&routingKey=incomingRequestValidation&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
+        .log("to rabbitmq:incomingRequestValidation");
 
-        //consume validation result
-        from("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidationResponse&exchangeType=topic&durable=true&autoDelete=false")
-            .routeId("RouteMailEnricher")
-            .log("from rabbitmq:incomingRequestValidationResponse")
-            .unmarshal().json(JsonLibrary.Jackson, IncomingRequest.class)
-            .choice()
-                .when(simple("${body.valid} == true"))
-                    .log("incomingRequestValidationResponse body is valid")
-                    .process(enrichWithCategoriesProcessor)
-                    .log("incomingRequest enriched by tags")
-                    //send confirmation mail
-                    .wireTap("direct:incomingRequestConfirmation").end()
-                    //.process(saveIncomingRequestProcessor)
-                    .to("jpa:" + IncomingRequest.class.getCanonicalName())
-                    .log("incomingRequest saved to db")
-                //TODO: Foward messge to expert application
-                .otherwise()
-                    .log("incomingRequestValidationResponse body is not valid")
-                    .setHeader("Subject", constant("Expert Callcenter WMPM"))
-                    .setHeader("To", simple("${body.mail}"))
-                    //.setBody("Your request was not valid"))
-                    .transform().simple("Your request was not valid!\n\n Your question:\n//${body.question}//")
-                    .to(smtpCredentials);
+    // consume validation result
+    from(
+        "rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidationResponse&exchangeType=topic&durable=true&autoDelete=false")
+        .routeId("RouteMailEnricher")
+        .log("from rabbitmq:incomingRequestValidationResponse")
+        .unmarshal()
+        .json(JsonLibrary.Jackson, IncomingRequest.class)
+        .choice()
+        .when(simple("${body.valid} == true"))
+        .log("incomingRequestValidationResponse body is valid")
+        .process(enrichWithCategoriesProcessor)
+        .log("incomingRequest enriched by tags")
+        // send confirmation mail
+        .wireTap("direct:incomingRequestConfirmation")
+        .end()
+        // .process(saveIncomingRequestProcessor)
+        .to("jpa:" + IncomingRequest.class.getCanonicalName())
+        .log("incomingRequest saved to db")
+        // TODO: Foward messge to expert application
+        .otherwise().log("incomingRequestValidationResponse body is not valid")
+        .setHeader("Subject", constant("Expert Callcenter WMPM"))
+        .setHeader("To", simple("${body.mail}"))
+        // .setBody("Your request was not valid"))
+        .transform().simple("Your request was not valid!\n\n Your question:\n//${body.question}//")
+        .to(smtpCredentials);
 
-        //send confirmation mail
-        from("direct:incomingRequestConfirmation")
-            .log("incomingRequestValidationResponse body is not valid")
-            .setHeader("Subject", constant("Expert Callcenter WMPM"))
-            .setHeader("To", simple("${body.mail}"))
-                    //.setBody("Your request was not valid"))
-            .transform().simple("Your request is valid!\n\n Your question:\n//${body.question}//")
-            .to(smtpCredentials);
-    }
+    // send confirmation mail
+    from("direct:incomingRequestConfirmation")
+        .log("incomingRequestValidationResponse body is not valid")
+        .setHeader("Subject", constant("Expert Callcenter WMPM"))
+        .setHeader("To", simple("${body.mail}"))
+        // .setBody("Your request was not valid"))
+        .transform().simple("Your request is valid!\n\n Your question:\n//${body.question}//")
+        .to(smtpCredentials);
+  }
 }

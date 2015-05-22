@@ -13,17 +13,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class RabbitMessagingRoute extends RouteBuilder {
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+  @Autowired
+  private RabbitTemplate rabbitTemplate;
 
-    @Override
-    public void configure() throws Exception {
+  @Override
+  public void configure() throws Exception {
 
-        from("direct:sendRabbitObjectMessage").process(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
+    from("direct:sendRabbitObjectMessage").process(new Processor() {
+      @Override
+      public void process(Exchange exchange) throws Exception {
 
-            }
-        });
-    }
+      }
+    });
+  }
 }

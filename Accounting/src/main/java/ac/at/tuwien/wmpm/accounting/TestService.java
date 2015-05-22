@@ -14,33 +14,25 @@ import javax.annotation.PostConstruct;
 @Service
 public class TestService {
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(TestService.class);
+  /** The Constant logger. */
+  private static final Logger logger = LoggerFactory.getLogger(TestService.class);
 
-    @PostConstruct
-    private void onPostConstruct() {
-
-
-       /* logger.info("TestService");
-        //add random user
-        int random = (int)(Math.random()*(10000000));
-        User newUser = new User();
-        newUser.setEmail("dietl" + String.valueOf(random) + "@gmail.com");
-        logger.info("TestService:" + newUser.getEmail());
-        userRepository.save(newUser);
-
-        newUser = new User();
-        newUser.setEmail("dietl" + String.valueOf(random+10) + "@gmail.com");
-        userRepository.save(newUser);
-*/
-
-
-        logger.info("TestService");
-        for (User u : userRepository.findAll()) {
-            logger.info(u.getEmail());
-        }
+  @PostConstruct
+  private void onPostConstruct() {
+    /*
+     * logger.info("TestService"); //add random user int random = (int)(Math.random()*(10000000));
+     * User newUser = new User(); newUser.setEmail("dietl" + String.valueOf(random) + "@gmail.com");
+     * logger.info("TestService:" + newUser.getEmail()); userRepository.save(newUser);
+     * 
+     * newUser = new User(); newUser.setEmail("dietl" + String.valueOf(random+10) + "@gmail.com");
+     * userRepository.save(newUser);
+     */
+    logger.info("TestService");
+    for (User u : userRepository.findAll()) {
+      logger.info(u.getEmail());
     }
+  }
 }

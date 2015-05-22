@@ -14,18 +14,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CamelConfiguration {
 
-    @Autowired
-    private MainRoute mainRoute;
+  @Autowired
+  private MainRoute mainRoute;
 
-    @Autowired
-    private IncomingRequestRoute incomingRequestRoute;
+  @Autowired
+  private IncomingRequestRoute incomingRequestRoute;
 
-    @Bean
-    public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
-        SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
-//        camelContext.addRoutes(mainRoute);
-        camelContext.addRoutes(incomingRequestRoute);
+  @Bean
+  public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
+    SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
+    camelContext.addRoutes(incomingRequestRoute);
 
-        return camelContext;
-    }
+    return camelContext;
+  }
 }

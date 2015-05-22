@@ -17,7 +17,7 @@ public class Category {
   @Column(unique = true)
   private String name;
 
-  @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
+  @ManyToMany
   private List<Expert> experts = new ArrayList<Expert>();
 
   public Category() {}

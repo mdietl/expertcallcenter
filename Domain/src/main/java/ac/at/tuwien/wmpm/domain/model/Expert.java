@@ -1,7 +1,6 @@
 package ac.at.tuwien.wmpm.domain.model;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 @Entity
 public class Expert extends Account {
 
-  @ManyToMany
+  @ManyToMany(mappedBy = "experts", fetch = FetchType.EAGER)
   private List<Category> categories = new ArrayList<Category>();
 
   public Expert () {}

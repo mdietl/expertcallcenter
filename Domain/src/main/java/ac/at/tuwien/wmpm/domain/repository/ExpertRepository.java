@@ -2,6 +2,8 @@ package ac.at.tuwien.wmpm.domain.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
+
 import ac.at.tuwien.wmpm.domain.model.Expert;
 import ac.at.tuwien.wmpm.domain.model.Category;
 
@@ -13,5 +15,6 @@ public interface ExpertRepository extends IGenericRepository<Expert, String> {
 
   public Expert findByEmail(String email);
   
-  public List<Expert> findByCategory(Category category);
+  @Query("SELECT e FROM experts e INNER JOIN e.categories c WHERE c IN (?1)")
+  public List<Expert> findByCategories(List<Category> categories);
 }

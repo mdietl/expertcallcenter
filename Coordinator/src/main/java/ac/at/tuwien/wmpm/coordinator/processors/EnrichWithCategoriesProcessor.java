@@ -38,7 +38,7 @@ public class EnrichWithCategoriesProcessor implements Processor {
     for (CalaisObject tag : calaisResponse.getSocialTags()) {
       logger.info(tag.getField("_typeGroup") + ":" + tag.getField("name"));
 
-      ir.getCategories().add(new Category(tag.getField("name")));
+      ir.addCategory(tag.getField("name"));
     }
 
     logger.info("processed mail and found tags: " + ir.getCategories());

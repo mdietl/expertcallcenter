@@ -36,12 +36,12 @@ public class MessageHandler implements Processor {
     
     List<Expert> experts = new ArrayList<Expert>();
     
-    for (Category category : incomingRequest.getCategories()) {
-      logger.info("Searching experts for category '" + category.getName() + "'...");
-      for(Expert expert : expertRepository.findByCategory(category)) {
+//    for (Category category : incomingRequest.getCategories()) {
+//      logger.info("Searching experts for category '" + category.getName() + "'...");
+      for(Expert expert : expertRepository.findByCategories(incomingRequest.getCategoryObjects())) {
         experts.add(expert);
         logger.info("\tExpert '" + expert.getEmail() + "' add for the category!");
       }
-    }
+//    }
   }
 }

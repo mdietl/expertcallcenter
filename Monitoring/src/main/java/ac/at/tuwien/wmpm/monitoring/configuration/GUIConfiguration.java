@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GUIConfiguration {
 
-    /**
-     * Main gui.
-     *
-     * @return the main gui
-     */
-    @Bean
-    public MainGUI mainGUI() {
-        return new MainGUI();
-    }
+  /**
+   * Main gui.
+   *
+   * @return the main gui
+   */
+  @Bean
+  public MainGUI mainGUI() {
+    return new MainGUI();
+  }
 }

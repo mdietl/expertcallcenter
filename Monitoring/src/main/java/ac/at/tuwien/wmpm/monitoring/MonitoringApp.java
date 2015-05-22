@@ -9,10 +9,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 @SpringBootApplication
 public class MonitoringApp {
 
-    public static void main(String[]args) {
-        new SpringApplicationBuilder(MonitoringApp.class)
-                .headless(false)
-                .web(false)
-                .run(args);
-    }
+  public static void main(String[] args) {
+    new SpringApplicationBuilder(MonitoringApp.class).headless(false).web(false).run(args);
+  }
 }

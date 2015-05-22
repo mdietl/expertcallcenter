@@ -8,41 +8,38 @@ import javax.persistence.Entity;
 @Entity
 public class User extends Account {
 
-    private Integer sentQuestions;
+    private int sentQuestions;
 
-    private Integer receivedAnswers;
+    private int receivedAnswers;
 
-    private Integer paidAnswers;
+    private int paidAnswers;
 
     public User() {
         super();
-        sentQuestions = 0;
-        receivedAnswers = 0;
-        paidAnswers = 0;
     }
 
 
-    public Integer getSentQuestions() {
+    public int getSentQuestions() {
         return sentQuestions;
     }
 
-    public void setSentQuestions(Integer sentQuestions) {
+    public void setSentQuestions(int sentQuestions) {
         this.sentQuestions = sentQuestions;
     }
 
-    public Integer getReceivedAnswers() {
+    public int getReceivedAnswers() {
         return receivedAnswers;
     }
 
-    public void setReceivedAnswers(Integer receivedAnswers) {
+    public void setReceivedAnswers(int receivedAnswers) {
         this.receivedAnswers = receivedAnswers;
     }
 
-    public Integer getPaidAnswers() {
+    public int getPaidAnswers() {
         return paidAnswers;
     }
 
-    public void setPaidAnswers(Integer paidAnswers) {
+    public void setPaidAnswers(int paidAnswers) {
         this.paidAnswers = paidAnswers;
     }
 }

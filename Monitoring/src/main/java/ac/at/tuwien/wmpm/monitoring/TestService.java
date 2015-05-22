@@ -1,6 +1,5 @@
 package ac.at.tuwien.wmpm.monitoring;
 
-import ac.at.tuwien.wmpm.domain.configuration.CommonRabbitConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -24,7 +23,6 @@ public class TestService {
     @PostConstruct
     private void onPostConstruct() {
 
-        //send message
-        rabbitTemplate.convertAndSend(CommonRabbitConfiguration.TEST_QUEUE, "TEST NEW MESSAGE 123");
+
     }
 }

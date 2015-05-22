@@ -31,7 +31,6 @@ public class IncomingRequest {
 
     private ArrayList<String> categories = new ArrayList<String>();
 
-
     public IncomingRequest() {}
 
     public IncomingRequest(UUID id) {
@@ -94,6 +93,8 @@ public class IncomingRequest {
                 ", mail='" + mail + '\'' +
                 ", title='" + title + '\'' +
                 ", question='" + question.substring(0, question.length() <= 15 ? question.length() : 15).replaceAll("(\\r|\\n)", "") + '\'' +
+                ", valid=" + valid +
+                ", categories=" + categories +
                 '}';
     }
 }

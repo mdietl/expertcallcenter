@@ -20,6 +20,12 @@ public class Category {
   @ManyToMany(mappedBy = "categories", fetch = FetchType.EAGER)
   private List<Expert> experts = new ArrayList<Expert>();
 
+  public Category() {}
+  
+  public Category(String name) {
+    this.name = name;
+  }
+  
   public String getName() {
     return name;
   }

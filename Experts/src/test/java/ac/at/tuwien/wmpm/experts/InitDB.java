@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by dietl_ma on 21/04/15.
+ * Edited by sadrian on 21/05/15.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ExpertsApp.class)

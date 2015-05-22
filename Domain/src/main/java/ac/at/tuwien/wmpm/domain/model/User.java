@@ -14,11 +14,12 @@ public class User extends Account {
 
   private int paidAnswers;
 
-  public User() {
-    super();
+  public User() {}
+
+  public User(String email) {
+    super.setEmail(email);
   }
-
-
+  
   public int getSentQuestions() {
     return sentQuestions;
   }

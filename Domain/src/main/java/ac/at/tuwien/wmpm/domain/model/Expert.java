@@ -15,6 +15,12 @@ public class Expert extends Account {
   @ManyToMany
   private List<Category> categories = new ArrayList<Category>();
 
+  public Expert () {}
+  
+  public Expert (String email) {
+    super.setEmail(email);
+  }
+  
   public List<Category> getCategories() {
     return categories;
   }

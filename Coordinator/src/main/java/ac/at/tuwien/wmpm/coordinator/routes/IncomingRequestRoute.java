@@ -81,6 +81,8 @@ public class IncomingRequestRoute extends RouteBuilder {
             .to("jpa:" + IncomingRequest.class.getCanonicalName())
             .log("incomingRequest saved to db")
             // TODO: Foward messge to expert application
+            .to("direct:redirectRequest")
+            .log("to direct:redirectRequest")
           .otherwise().log("incomingRequestValidationResponse body is not valid")
             .setHeader("Subject", constant("Expert Callcenter WMPM"))
             .setHeader("To", simple("${body.mail}"))
@@ -97,5 +99,21 @@ public class IncomingRequestRoute extends RouteBuilder {
         .transform()
         .simple("Your request is valid!\n\n Your question:\n//${body.question}//")
         .to(smtpCredentials);
+    
+    // send message to experts app
+    from("direct:redirectRequest")
+        .routeId("RouteRedirectRequest")
+        .marshal()
+        .json(JsonLibrary.Jackson)
+        .to("rabbitmq://localhost/expertCallCenterExchange?queue=redirectRequest&routingKey=redirectRequest&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
+        .log("to rabbitmq:redirectRequest");
+    
+    // consume experts response
+    from("rabbitmq://localhost/expertCallCenterExchange?queue=expertsResponse&exchangeType=topic&durable=true&autoDelete=false")
+        .routeId("RouteExperts")
+        .log("from rabbitmq:expertsResponse")
+        .unmarshal()
+        .json(JsonLibrary.Jackson, IncomingRequest.class);
+        //TODO aggregate the responses and send an answer to the user
   }
 }

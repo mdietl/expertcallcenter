@@ -16,6 +16,10 @@ public class Account {
   private String email;
 
   public Account() {}
+  
+  public Account(String email) {
+    this.email = email;
+  }
 
   public String getEmail() {
     return email;

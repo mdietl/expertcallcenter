@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class IncomingRequest {
 
   private Boolean valid = false;
 
-  private ArrayList<String> categories = new ArrayList<String>();
+  private List<Category> categories = new ArrayList<Category>();
 
   public IncomingRequest() {}
 
@@ -68,11 +69,11 @@ public class IncomingRequest {
     this.mail = mail;
   }
 
-  public ArrayList<String> getCategories() {
+  public List<Category> getCategories() {
     return categories;
   }
 
-  public void setCategories(ArrayList<String> categories) {
+  public void setCategories(List<Category> categories) {
     this.categories = categories;
   }
 

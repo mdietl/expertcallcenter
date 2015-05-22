@@ -22,14 +22,6 @@ public class TestService {
 
   @PostConstruct
   private void onPostConstruct() {
-    /*
-     * logger.info("TestService"); //add random user int random = (int)(Math.random()*(10000000));
-     * User newUser = new User(); newUser.setEmail("dietl" + String.valueOf(random) + "@gmail.com");
-     * logger.info("TestService:" + newUser.getEmail()); userRepository.save(newUser);
-     * 
-     * newUser = new User(); newUser.setEmail("dietl" + String.valueOf(random+10) + "@gmail.com");
-     * userRepository.save(newUser);
-     */
     logger.info("TestService");
     for (User u : userRepository.findAll()) {
       logger.info(u.getEmail());

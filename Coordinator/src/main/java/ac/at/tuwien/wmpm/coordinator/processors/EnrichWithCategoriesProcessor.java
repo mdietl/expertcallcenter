@@ -1,10 +1,12 @@
 package ac.at.tuwien.wmpm.coordinator.processors;
 
+import ac.at.tuwien.wmpm.domain.model.Category;
 import ac.at.tuwien.wmpm.domain.model.IncomingRequest;
 import mx.bigdata.jcalais.CalaisClient;
 import mx.bigdata.jcalais.CalaisObject;
 import mx.bigdata.jcalais.CalaisResponse;
 import mx.bigdata.jcalais.rest.CalaisRestClient;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
@@ -36,7 +38,7 @@ public class EnrichWithCategoriesProcessor implements Processor {
     for (CalaisObject tag : calaisResponse.getSocialTags()) {
       logger.info(tag.getField("_typeGroup") + ":" + tag.getField("name"));
 
-      ir.getCategories().add(tag.getField("name"));
+      ir.getCategories().add(new Category(tag.getField("name")));
     }
 
     logger.info("processed mail and found tags: " + ir.getCategories());

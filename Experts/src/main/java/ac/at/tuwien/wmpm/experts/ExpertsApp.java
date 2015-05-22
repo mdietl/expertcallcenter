@@ -15,15 +15,16 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories({"ac.at.tuwien.wmpm.domain.repository"})
 public class ExpertsApp {
 
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(ExpertsApp.class);
+  /** The Constant logger. */
+  private static final Logger logger = LoggerFactory.getLogger(ExpertsApp.class);
 
-    /**
-     * The main method.
-     *
-     * @param args the arguments
-     */
-    public static void main(String[] args) {
-        SpringApplication.run(ExpertsApp.class, args);
-    }
+  /**
+   * The main method.
+   *
+   * @param args the arguments
+   */
+  public static void main(String[] args) {
+    logger.info("Starting Experts App...");
+    SpringApplication.run(ExpertsApp.class, args);
+  }
 }

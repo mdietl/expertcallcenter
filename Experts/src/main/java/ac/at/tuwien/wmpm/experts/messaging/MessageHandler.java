@@ -1,4 +1,4 @@
-package ac.at.tuwien.wmpm.accounting.messaging;
+package ac.at.tuwien.wmpm.experts.messaging;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

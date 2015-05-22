@@ -1,4 +1,4 @@
-package ac.at.tuwien.wmpm.accounting;
+package ac.at.tuwien.wmpm.experts;
 
 import ac.at.tuwien.wmpm.domain.model.Expert;
 import ac.at.tuwien.wmpm.domain.repository.ExpertRepository;
@@ -32,10 +32,5 @@ public class TestService {
         for (Expert e : expertRepository.findAll()) {
             logger.info(e.getEmail());
         }
-
-
-
-
-
     }
 }

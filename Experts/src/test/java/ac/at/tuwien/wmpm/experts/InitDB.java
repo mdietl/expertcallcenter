@@ -56,6 +56,30 @@ public class InitDB {
         categoryWorkflow.setName("Workflow");
         categoryRepository.save(categoryWorkflow);
         
+        Category categoryMathematics = new Category();
+        categoryMathematics.setName("Mathematics");
+        categoryRepository.save(categoryMathematics);
+        
+        Category categoryAbstractAlgebra = new Category();
+        categoryAbstractAlgebra.setName("Abstract algebra");
+        categoryRepository.save(categoryAbstractAlgebra);
+        
+        Category categoryIdempotence = new Category();
+        categoryIdempotence.setName("Idempotence");
+        categoryRepository.save(categoryIdempotence);
+        
+        Category categoryTheoreticalComputerScience = new Category();
+        categoryTheoreticalComputerScience.setName("Theoretical computer science");
+        categoryRepository.save(categoryTheoreticalComputerScience);
+        
+        Category categoryCamel = new Category();
+        categoryCamel.setName("Camel");
+        categoryRepository.save(categoryCamel);
+        
+        Category categoryTechnology_Internet = new Category();
+        categoryTechnology_Internet.setName("Technology_Internet");
+        categoryRepository.save(categoryTechnology_Internet);
+        
         //add test experts
         Expert martin = new Expert();
         martin.setEmail("mdietl83@gmail.com");
@@ -63,6 +87,7 @@ public class InitDB {
         martin.getCategories().add(categoryFramework);
         martin.getCategories().add(categoryDataBase);
         martin.getCategories().add(categoryWorkflow);
+        martin.getCategories().add(categoryCamel);
         expertRepository.save(martin);
 
         Expert anna = new Expert();
@@ -70,13 +95,16 @@ public class InitDB {
         anna.getCategories().add(categoryProgramming);
         anna.getCategories().add(categoryTesting);
         anna.getCategories().add(categoryDataBase);
+        anna.getCategories().add(categoryMathematics);
         expertRepository.save(anna);
 
         Expert georg = new Expert();
-        georg.setEmail("e0726622@student.tuwien.ac.at");
+        georg.setEmail("georg.wmpm.test@gmail.com");
         georg.getCategories().add(categoryProgramming);
         georg.getCategories().add(categoryWorkflow);
         georg.getCategories().add(categoryFramework);
+        georg.getCategories().add(categoryTechnology_Internet);
+        georg.getCategories().add(categoryTheoreticalComputerScience);
         expertRepository.save(georg);
         
         Expert clemens = new Expert();
@@ -84,6 +112,7 @@ public class InitDB {
         clemens.getCategories().add(categoryTesting);
         clemens.getCategories().add(categoryProgramming);
         clemens.getCategories().add(categoryDataBase);
+        clemens.getCategories().add(categoryIdempotence);
         expertRepository.save(clemens);
         
         Expert boris = new Expert();
@@ -91,6 +120,7 @@ public class InitDB {
         boris.getCategories().add(categoryTesting);
         boris.getCategories().add(categoryProgramming);
         boris.getCategories().add(categoryWorkflow);
+        boris.getCategories().add(categoryAbstractAlgebra);
         expertRepository.save(boris);
     }
 

@@ -27,7 +27,7 @@ public class RequestValidationProcessor implements Processor {
     logger.info("Processing request: " + incomingRequest);
 
     User user = userRepository.findByEmail(incomingRequest.getMail());
-    logger.info("Processed request: " + incomingRequest);
+    logger.info("user: " + user);
     if (user == null) {
       logger.info("user not found. create new user...");
       user = new User();
@@ -42,7 +42,7 @@ public class RequestValidationProcessor implements Processor {
       incomingRequest.setValid(false);
     else
       user.setSentQuestions(user.getSentQuestions() + 1);
-    logger.info("Processed request: " + incomingRequest);
+    logger.info("user: " + user);
     userRepository.save(user);
 
     logger.info("Processed request: " + incomingRequest);

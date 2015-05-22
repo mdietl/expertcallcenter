@@ -1,6 +1,5 @@
 package ac.at.tuwien.wmpm.accounting.processors;
 
-import ac.at.tuwien.wmpm.domain.configuration.CommonRabbitConfiguration;
 import ac.at.tuwien.wmpm.domain.model.IncomingRequest;
 import ac.at.tuwien.wmpm.domain.model.User;
 import ac.at.tuwien.wmpm.domain.repository.UserRepository;
@@ -25,23 +24,27 @@ public class RequestValidationProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         IncomingRequest incomingRequest = exchange.getIn().getBody(IncomingRequest.class);
-
         logger.info("Processing request: " + incomingRequest);
-
-        incomingRequest.setCounter(incomingRequest.getCounter()+1);
 
         User user = userRepository.findByEmail(incomingRequest.getMail());
 
         if (user == null) {
             logger.info("user not found. create new user...");
-            User newUser = new User();
-            newUser.setEmail(incomingRequest.getMail());
-            userRepository.save(newUser);
+            user = new User();
+            user.setEmail(incomingRequest.getMail());
         }
+
+        logger.info("user: " + user);
 
         //do some validation stuff
         incomingRequest.setValid(true);
+        if (user.getSentQuestions()-2 >= (user.getPaidAnswers()))
+            incomingRequest.setValid(false);
+        else
+            user.setSentQuestions(user.getSentQuestions()+1);
 
-        logger.info("Processed request["+incomingRequest.getCounter()+"]: " + incomingRequest);
+        userRepository.save(user);
+
+        logger.info("Processed request: " + incomingRequest);
     }
 }

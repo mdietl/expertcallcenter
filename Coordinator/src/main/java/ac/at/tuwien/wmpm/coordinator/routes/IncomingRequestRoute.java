@@ -3,10 +3,7 @@ package ac.at.tuwien.wmpm.coordinator.routes;
 import ac.at.tuwien.wmpm.coordinator.processors.EnrichWithCategoriesProcessor;
 import ac.at.tuwien.wmpm.coordinator.processors.IncomingRequestProcessor;
 import ac.at.tuwien.wmpm.coordinator.processors.SaveIncomingRequestProcessor;
-import ac.at.tuwien.wmpm.domain.configuration.CommonRabbitConfiguration;
 import ac.at.tuwien.wmpm.domain.model.IncomingRequest;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
@@ -15,8 +12,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by dietl_ma on 09/05/15.
@@ -62,16 +57,7 @@ public class IncomingRequestRoute extends RouteBuilder {
             .routeId("RouteIncomingRequestBuilder")
             .marshal().json(JsonLibrary.Jackson)
             .to("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidation&routingKey=incomingRequestValidation&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
-//            .log("from direct:incomingRequest")
-//            .process(new Processor() {
-//                @Override
-//                public void process(Exchange exchange) throws Exception {
-//
-//                    IncomingRequest ir = (IncomingRequest) exchange.getIn().getBody();
-//                    rabbitTemplate.convertAndSend(CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION, ir);
-//                }
-//            })
-            .log("to rabbitmq:" + CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION);
+            .log("to rabbitmq:incomingRequestValidation");
 
         //consume validation result
         from("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidationResponse&exchangeType=topic&durable=true&autoDelete=false")

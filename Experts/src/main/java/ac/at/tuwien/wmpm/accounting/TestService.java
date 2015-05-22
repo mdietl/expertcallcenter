@@ -1,17 +1,14 @@
 package ac.at.tuwien.wmpm.accounting;
 
-import ac.at.tuwien.wmpm.domain.configuration.CommonRabbitConfiguration;
 import ac.at.tuwien.wmpm.domain.model.Expert;
-import ac.at.tuwien.wmpm.domain.model.IncomingRequest;
-import ac.at.tuwien.wmpm.domain.model.User;
 import ac.at.tuwien.wmpm.domain.repository.ExpertRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.PostConstruct;
-import java.util.UUID;
 
 /**
  * Created by dietl_ma on 21/04/15.

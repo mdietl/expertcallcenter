@@ -42,4 +42,17 @@ public class User extends Account {
   public void setPaidAnswers(int paidAnswers) {
     this.paidAnswers = paidAnswers;
   }
+  
+  @Override
+  public String toString() {
+    return "User{"
+        + "email="
+        + getEmail()
+        + ", sentQuestions="
+        + sentQuestions
+        + ", receivedAnswers="
+        + receivedAnswers
+        + ", paidAnswers="
+        + paidAnswers + '}';
+  }
 }

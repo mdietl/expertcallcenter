@@ -2,6 +2,7 @@ package ac.at.tuwien.wmpm.domain.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,5 +34,14 @@ public class Category {
 
   public void setExperts(List<Expert> experts) {
     this.experts = experts;
+  }
+  
+  @Override
+  public String toString() {
+    return "Category{"
+        + "name="
+        + name
+        + ", experts={"
+        + experts + "}}";
   }
 }

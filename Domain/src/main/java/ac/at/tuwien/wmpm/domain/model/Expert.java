@@ -2,6 +2,7 @@ package ac.at.tuwien.wmpm.domain.model;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,5 +21,14 @@ public class Expert extends Account {
 
   public void setCategories(List<Category> categories) {
     this.categories = categories;
+  }
+  
+  @Override
+  public String toString() {
+    return "User{"
+        + "email="
+        + getEmail()
+        + ", categories={"
+        + categories + "}}";
   }
 }

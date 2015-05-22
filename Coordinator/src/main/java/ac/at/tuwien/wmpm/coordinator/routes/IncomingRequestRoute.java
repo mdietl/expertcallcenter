@@ -60,15 +60,17 @@ public class IncomingRequestRoute extends RouteBuilder {
         //send message to accounting app to validate request
         from("direct:incomingRequest")
             .routeId("RouteIncomingRequestBuilder")
-            .log("from direct:incomingRequest")
-            .process(new Processor() {
-                @Override
-                public void process(Exchange exchange) throws Exception {
-
-                    IncomingRequest ir = (IncomingRequest) exchange.getIn().getBody();
-                    rabbitTemplate.convertAndSend(CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION, ir);
-                }
-            })
+            .marshal().json(JsonLibrary.Jackson)
+            .to("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidation&routingKey=incomingRequestValidation&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
+//            .log("from direct:incomingRequest")
+//            .process(new Processor() {
+//                @Override
+//                public void process(Exchange exchange) throws Exception {
+//
+//                    IncomingRequest ir = (IncomingRequest) exchange.getIn().getBody();
+//                    rabbitTemplate.convertAndSend(CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION, ir);
+//                }
+//            })
             .log("to rabbitmq:" + CommonRabbitConfiguration.INCOMING_REQUEST_VALIDATION);
 
         //consume validation result

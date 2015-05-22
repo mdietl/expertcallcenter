@@ -27,14 +27,12 @@ public class RequestValidationProcessor implements Processor {
     logger.info("Processing request: " + incomingRequest);
 
     User user = userRepository.findByEmail(incomingRequest.getMail());
-    logger.info("user: " + user);
+
     if (user == null) {
       logger.info("user not found. create new user...");
       user = new User();
       user.setEmail(incomingRequest.getMail());
     }
-
-    logger.info("user: " + user);
 
     // do some validation stuff
     incomingRequest.setValid(true);
@@ -42,7 +40,9 @@ public class RequestValidationProcessor implements Processor {
       incomingRequest.setValid(false);
     else
       user.setSentQuestions(user.getSentQuestions() + 1);
+    
     logger.info("user: " + user);
+    
     userRepository.save(user);
 
     logger.info("Processed request: " + incomingRequest);

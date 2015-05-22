@@ -48,8 +48,11 @@ public class IncomingRequestRoute extends RouteBuilder {
     
     // consume mail
     from(mailCredentials + "&delete=false&unseen=true&consumer.delay=10000")
-        .routeId("RouteMailPoller").log("from mail server").process(incomingRequestProcessor)
-        .to("direct:incomingRequest").log("to direct:incomingRequest");
+        .routeId("RouteMailPoller")
+        .log("from mail server")
+        .process(incomingRequestProcessor)
+        .to("direct:incomingRequest")
+        .log("to direct:incomingRequest");
 
     // send message to accounting app to validate request
     from("direct:incomingRequest")
@@ -67,31 +70,32 @@ public class IncomingRequestRoute extends RouteBuilder {
         .unmarshal()
         .json(JsonLibrary.Jackson, IncomingRequest.class)
         .choice()
-        .when(simple("${body.valid} == true"))
-        .log("incomingRequestValidationResponse body is valid")
-        .process(enrichWithCategoriesProcessor)
-        .log("incomingRequest enriched by tags")
-        // send confirmation mail
-        .wireTap("direct:incomingRequestConfirmation")
-        .end()
-        // .process(saveIncomingRequestProcessor)
-        .to("jpa:" + IncomingRequest.class.getCanonicalName())
-        .log("incomingRequest saved to db")
-        // TODO: Foward messge to expert application
-        .otherwise().log("incomingRequestValidationResponse body is not valid")
-        .setHeader("Subject", constant("Expert Callcenter WMPM"))
-        .setHeader("To", simple("${body.mail}"))
-        // .setBody("Your request was not valid"))
-        .transform().simple("Your request was not valid!\n\n Your question:\n//${body.question}//")
-        .to(smtpCredentials);
+          .when(simple("${body.valid} == true"))
+            .log("incomingRequestValidationResponse body is valid")
+            .process(enrichWithCategoriesProcessor)
+            .log("incomingRequest enriched by tags")
+            // send confirmation mail
+            .wireTap("direct:incomingRequestConfirmation")
+            .end()
+            // .process(saveIncomingRequestProcessor)
+            .to("jpa:" + IncomingRequest.class.getCanonicalName())
+            .log("incomingRequest saved to db")
+            // TODO: Foward messge to expert application
+          .otherwise().log("incomingRequestValidationResponse body is not valid")
+            .setHeader("Subject", constant("Expert Callcenter WMPM"))
+            .setHeader("To", simple("${body.mail}"))
+            // .setBody("Your request was not valid"))
+            .transform().simple("Your request was not valid!\n\n Your question:\n//${body.question}//")
+            .to(smtpCredentials);
 
     // send confirmation mail
     from("direct:incomingRequestConfirmation")
-        .log("incomingRequestValidationResponse body is not valid")
+        .log("from incoming request confirmation")
         .setHeader("Subject", constant("Expert Callcenter WMPM"))
         .setHeader("To", simple("${body.mail}"))
         // .setBody("Your request was not valid"))
-        .transform().simple("Your request is valid!\n\n Your question:\n//${body.question}//")
+        .transform()
+        .simple("Your request is valid!\n\n Your question:\n//${body.question}//")
         .to(smtpCredentials);
   }
 }

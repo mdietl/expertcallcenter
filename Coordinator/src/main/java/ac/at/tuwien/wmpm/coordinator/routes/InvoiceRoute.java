@@ -1,6 +1,9 @@
 package ac.at.tuwien.wmpm.coordinator.routes;
 
+import ac.at.tuwien.wmpm.domain.model.IncomingRequest;
+
 import java.io.File;
+import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,6 +27,8 @@ public class InvoiceRoute {
 
 public static void main(String argv[]) throws ParserConfigurationException, TransformerException {
   
+    IncomingRequest ir = new IncomingRequest(UUID.randomUUID());
+    
     DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
     DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
   
@@ -35,21 +40,17 @@ public static void main(String argv[]) throws ParserConfigurationException, Tran
     rootElement.appendChild(invoice);
   
     Attr attr = doc.createAttribute("invoice_Id");
-    attr.setValue("1");
+    attr.setValue(ir.getId().toString());
     invoice.setAttributeNode(attr);
     
-    Element firstname = doc.createElement("firstname");
-    firstname.appendChild(doc.createTextNode("Max"));
-    invoice.appendChild(firstname);
-  
-    Element lastname = doc.createElement("lastname");
-    lastname.appendChild(doc.createTextNode("Superexpert"));
-    invoice.appendChild(lastname);
-  
+    Element expert = doc.createElement("expert");
+    expert.appendChild(doc.createTextNode("Test")); //xx.getExpert....
+    invoice.appendChild(expert);
+   
     Element mail = doc.createElement("email");
-    mail.appendChild(doc.createTextNode("Max.Superexpert@gmail.com"));
+    mail.appendChild(doc.createTextNode("Max.Superexpert@gmail.com")); //xx.getExpertMail...
     invoice.appendChild(mail);
-  
+      
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
     Transformer transformer = transformerFactory.newTransformer();
     DOMSource source = new DOMSource(doc);

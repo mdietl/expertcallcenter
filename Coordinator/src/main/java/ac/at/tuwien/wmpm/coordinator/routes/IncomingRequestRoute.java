@@ -74,7 +74,13 @@ public class IncomingRequestRoute extends RouteBuilder {
                     //.process(saveIncomingRequestProcessor)
                     .to("jpa:" + IncomingRequest.class.getCanonicalName())
                     .log("incomingRequest saved to db")
-                //TODO: Foward messge to expert application
+                    
+                    /TODO: Foward messge to expert application 
+                    // this should copy the exchange ?! (used wireTap) 
+                    //.multicast().to("direct:forwardToExpertApp").end()
+                    .wireTap("direct:forwardToExpertApp").end()
+                   // log("forwared message to ecpert application / tried also with mulicast")
+                    log("forwared message to ecpert application")
                 .otherwise()
                     .log("incomingRequestValidationResponse body is not valid")
                     .setHeader("Subject", constant("Expert Callcenter WMPM"))

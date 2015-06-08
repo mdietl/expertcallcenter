@@ -17,7 +17,7 @@ public class Category {
   @Column(unique = true)
   private String name;
 
-  @ManyToMany
+  @ManyToMany(mappedBy = "categories")
   private List<Expert> experts = new ArrayList<Expert>();
 
   public Category() {}

@@ -11,7 +11,10 @@ import java.util.List;
 @Entity
 public class Expert extends Account {
 
-  @ManyToMany(mappedBy = "experts", fetch = FetchType.EAGER)
+  @ManyToMany
+  @JoinTable(
+          name = "category_expert"
+  )
   private List<Category> categories = new ArrayList<Category>();
 
   public Expert () {}

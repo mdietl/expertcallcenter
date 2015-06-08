@@ -3,6 +3,7 @@ package ac.at.tuwien.wmpm.experts.messaging;
 import java.util.List;
 import java.util.ArrayList;
 
+import ac.at.tuwien.wmpm.domain.repository.CategoryRepository;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
@@ -21,27 +22,38 @@ import ac.at.tuwien.wmpm.domain.repository.ExpertRepository;
 @Service
 public class MessageHandler implements Processor {
 
-  @Autowired
-  private ExpertRepository expertRepository;
+    @Autowired
+    private ExpertRepository expertRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
   
-  /** The Constant logger. */
-  private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
+    /** The Constant logger. */
+    private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
-  @Override
-  public void process(Exchange exchange) throws Exception {
-    IncomingRequest incomingRequest = exchange.getIn().getBody(IncomingRequest.class);
-    logger.info("Request got by experts: " + incomingRequest);
+    @Override
+    public void process(Exchange exchange) throws Exception {
+        IncomingRequest incomingRequest = exchange.getIn().getBody(IncomingRequest.class);
+        logger.info("Request got by experts: " + incomingRequest);
 
-    logger.info("Find experts for the categories: {" + incomingRequest.getCategories() + "}");
-    
-    List<Expert> experts = new ArrayList<Expert>();
-    
-//    for (Category category : incomingRequest.getCategories()) {
-//      logger.info("Searching experts for category '" + category.getName() + "'...");
-      for(Expert expert : expertRepository.findByCategories(incomingRequest.getCategoryObjects())) {
-        experts.add(expert);
-        logger.info("\tExpert '" + expert.getEmail() + "' add for the category!");
-      }
-//    }
-  }
+        logger.info("Find experts for the categories: {" + incomingRequest.getCategories() + "}");
+
+
+
+        List<Category> categories = new ArrayList<>();
+        for (String catString : incomingRequest.getCategories()) {
+            Category cat =  categoryRepository.findByName(catString);
+
+            if (cat != null) {
+                categories.add(cat);
+            }
+        }
+        for(Expert expert : expertRepository.findByCategoriesIn(categories)) {
+            incomingRequest.getExperts().add(expert.getEmail());
+            logger.info("\tExpert '" + expert.getEmail() + "' add for the category!");
+        }
+
+
+
+    }
 }

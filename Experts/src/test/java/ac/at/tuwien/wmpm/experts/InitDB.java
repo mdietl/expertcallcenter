@@ -15,6 +15,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by dietl_ma on 21/04/15.
  * Edited by sadrian on 21/05/15.
@@ -127,7 +130,16 @@ public class InitDB {
 
   @Test
   public void testEntries() throws Exception {
-    Assert.assertEquals(5, categoryRepository.count());
+    Assert.assertEquals(11, categoryRepository.count());
     Assert.assertEquals(5, expertRepository.count());
+
+      Category categoryTesting = categoryRepository.findByName("Testing");
+
+      List<Category> l = new ArrayList<>();
+      l.add(categoryTesting);
+      List<Expert> le =  expertRepository.findByCategoriesIn(l);
+      for (Expert e : le) {
+          System.out.println("FOUND: " + e.getEmail());
+      }
   }
 }

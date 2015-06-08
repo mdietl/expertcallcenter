@@ -40,7 +40,8 @@ public class RequestValidationProcessor implements Processor {
       incomingRequest.setValid(false);
     else
       user.setSentQuestions(user.getSentQuestions() + 1);
-    
+
+      incomingRequest.setValid(true);
     logger.info("user: " + user);
     
     userRepository.save(user);

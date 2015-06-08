@@ -4,14 +4,18 @@ import ac.at.tuwien.wmpm.coordinator.processors.EnrichWithCategoriesProcessor;
 import ac.at.tuwien.wmpm.coordinator.processors.IncomingRequestProcessor;
 import ac.at.tuwien.wmpm.coordinator.processors.SaveIncomingRequestProcessor;
 import ac.at.tuwien.wmpm.domain.model.IncomingRequest;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 
 /**
  * Created by dietl_ma on 09/05/15.
@@ -95,7 +99,6 @@ public class IncomingRequestRoute extends RouteBuilder {
         .log("from incoming request confirmation")
         .setHeader("Subject", constant("Expert Callcenter WMPM"))
         .setHeader("To", simple("${body.mail}"))
-        // .setBody("Your request was not valid"))
         .transform()
         .simple("Your request is valid!\n\n Your question:\n//${body.question}//")
         .to(smtpCredentials);
@@ -113,7 +116,25 @@ public class IncomingRequestRoute extends RouteBuilder {
         .routeId("RouteExperts")
         .log("from rabbitmq:expertsResponse")
         .unmarshal()
-        .json(JsonLibrary.Jackson, IncomingRequest.class);
-        //TODO aggregate the responses and send an answer to the user
+        .json(JsonLibrary.Jackson, IncomingRequest.class)
+        .to("jpa:" + IncomingRequest.class.getCanonicalName())
+        .choice()
+            .when(simple("${body.experts.size} > 0"))
+                .log("send messages to expert")
+                .process(new Processor() {
+                    @Override
+                    public void process(Exchange exchange) throws Exception {
+                        IncomingRequest ir = (IncomingRequest) exchange.getIn().getBody();
+
+                        exchange.getIn().setHeader("To", StringUtils.join(ir.getExperts(), ","));
+                        exchange.getIn().setHeader("Subject", "[" + ir.getId() + "] Expert Callcenter WMPM");
+                    }
+                })
+                .transform()
+                .simple("Please answer this question:\n\n//${body.question}//")
+                .to(smtpCredentials)
+            .otherwise().log("no expert available");
+
+
   }
 }

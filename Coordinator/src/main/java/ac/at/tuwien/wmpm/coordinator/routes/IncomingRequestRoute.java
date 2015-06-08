@@ -84,10 +84,10 @@ public class IncomingRequestRoute extends RouteBuilder {
             // .process(saveIncomingRequestProcessor)
             .to("jpa:" + IncomingRequest.class.getCanonicalName())
             .log("incomingRequest saved to db")
-            // TODO: Foward messge to expert application
             .to("direct:redirectRequest")
             .log("to direct:redirectRequest")
           .otherwise().log("incomingRequestValidationResponse body is not valid")
+            .removeHeaders("*")
             .setHeader("Subject", constant("Expert Callcenter WMPM"))
             .setHeader("To", simple("${body.mail}"))
             // .setBody("Your request was not valid"))
@@ -97,6 +97,7 @@ public class IncomingRequestRoute extends RouteBuilder {
     // send confirmation mail
     from("direct:incomingRequestConfirmation")
         .log("from incoming request confirmation")
+        .removeHeaders("*")
         .setHeader("Subject", constant("Expert Callcenter WMPM"))
         .setHeader("To", simple("${body.mail}"))
         .transform()
@@ -120,7 +121,8 @@ public class IncomingRequestRoute extends RouteBuilder {
         .to("jpa:" + IncomingRequest.class.getCanonicalName())
         .choice()
             .when(simple("${body.experts.size} > 0"))
-                .log("send messages to expert")
+                .log("send messages to experts")
+                .removeHeaders("*")
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
@@ -131,7 +133,8 @@ public class IncomingRequestRoute extends RouteBuilder {
                     }
                 })
                 .transform()
-                .simple("Please answer this question:\n\n//${body.question}//")
+                .simple("Please answer this question and use this id in the subject:\n[${body.id}]" +
+                        "\n\n''${body.question}''")
                 .to(smtpCredentials)
             .otherwise().log("no expert available");
 

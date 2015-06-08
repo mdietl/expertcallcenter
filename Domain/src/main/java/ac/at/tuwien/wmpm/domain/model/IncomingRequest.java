@@ -3,10 +3,10 @@ package ac.at.tuwien.wmpm.domain.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
+
 import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -31,7 +31,10 @@ public class IncomingRequest {
 
     private ArrayList<String> categories = new ArrayList<String>();
 
-    public IncomingRequest() {}
+    private ArrayList<String> experts = new ArrayList<>();
+
+    public IncomingRequest() {
+    }
 
     public IncomingRequest(UUID id) {
         this.id = id;
@@ -70,12 +73,32 @@ public class IncomingRequest {
         this.mail = mail;
     }
 
-    public ArrayList<String> getCategories() {
+    public List<String> getCategories() {
         return categories;
+    }
+
+    public List<Category> getCategoryObjects() {
+        List<Category> categoryObjects = new ArrayList<Category>();
+        for (String cat : categories) {
+            categoryObjects.add(new Category(cat));
+        }
+        return categoryObjects;
+    }
+
+    public ArrayList<String> getExperts() {
+        return experts;
+    }
+
+    public void setExperts(ArrayList<String> experts) {
+        this.experts = experts;
     }
 
     public void setCategories(ArrayList<String> categories) {
         this.categories = categories;
+    }
+
+    public void addCategory(String category) {
+        categories.add(category);
     }
 
     public Boolean getValid() {
@@ -88,13 +111,17 @@ public class IncomingRequest {
 
     @Override
     public String toString() {
-        return "IncomingRequest{" +
-                "id=" + id +
-                ", mail='" + mail + '\'' +
-                ", title='" + title + '\'' +
-                ", question='" + question.substring(0, question.length() <= 15 ? question.length() : 15).replaceAll("(\\r|\\n)", "") + '\'' +
-                ", valid=" + valid +
-                ", categories=" + categories +
-                '}';
+        return "IncomingRequest{"
+                + "id="
+                + id
+                + ", mail='"
+                + mail
+                + '\''
+                + ", title='"
+                + title
+                + '\''
+                + ", question='"
+                + question.substring(0, question.length() <= 15 ? question.length() : 15).replaceAll(
+                "(\\r|\\n)", "") + '\'' + ", valid=" + valid + ", categories=" + categories + '}';
     }
 }

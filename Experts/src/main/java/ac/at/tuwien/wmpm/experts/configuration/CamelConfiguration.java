@@ -1,6 +1,6 @@
-package ac.at.tuwien.wmpm.accounting.configuration;
+package ac.at.tuwien.wmpm.experts.configuration;
 
-import ac.at.tuwien.wmpm.accounting.routes.RequestValidationRoute;
+import ac.at.tuwien.wmpm.experts.routes.RequestRedirectRoute;
 import org.apache.camel.spring.SpringCamelContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -8,18 +8,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Created by Georg on 17.05.2015.
+ * Created by Anna Sadriu on 22.05.2015.
  */
 @Configuration
 public class CamelConfiguration {
 
   @Autowired
-  private RequestValidationRoute requestValidationRoute;
+  private RequestRedirectRoute requestRedirectRoute;
 
   @Bean
   public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
     SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
-    camelContext.addRoutes(requestValidationRoute);
+    camelContext.addRoutes(requestRedirectRoute);
 
     return camelContext;
   }

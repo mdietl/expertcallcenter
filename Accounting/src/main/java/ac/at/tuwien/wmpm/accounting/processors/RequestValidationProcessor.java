@@ -16,35 +16,36 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestValidationProcessor implements Processor {
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestValidationProcessor.class);
+  private static final Logger logger = LoggerFactory.getLogger(RequestValidationProcessor.class);
 
-    @Override
-    public void process(Exchange exchange) throws Exception {
-        IncomingRequest incomingRequest = exchange.getIn().getBody(IncomingRequest.class);
-        logger.info("Processing request: " + incomingRequest);
+  @Override
+  public void process(Exchange exchange) throws Exception {
+    IncomingRequest incomingRequest = exchange.getIn().getBody(IncomingRequest.class);
+    logger.info("Processing request: " + incomingRequest);
 
-        User user = userRepository.findByEmail(incomingRequest.getMail());
+    User user = userRepository.findByEmail(incomingRequest.getMail());
 
-        if (user == null) {
-            logger.info("user not found. create new user...");
-            user = new User();
-            user.setEmail(incomingRequest.getMail());
-        }
-
-        logger.info("user: " + user);
-
-        //do some validation stuff
-        incomingRequest.setValid(true);
-        if (user.getSentQuestions()-2 >= (user.getPaidAnswers()))
-            incomingRequest.setValid(false);
-        else
-            user.setSentQuestions(user.getSentQuestions()+1);
-
-        userRepository.save(user);
-
-        logger.info("Processed request: " + incomingRequest);
+    if (user == null) {
+      logger.info("user not found. create new user...");
+      user = new User();
+      user.setEmail(incomingRequest.getMail());
     }
+
+    // do some validation stuff
+    incomingRequest.setValid(true);
+    if (user.getSentQuestions() - 2 >= (user.getPaidAnswers()))
+      incomingRequest.setValid(false);
+    else
+      user.setSentQuestions(user.getSentQuestions() + 1);
+
+      incomingRequest.setValid(true);
+    logger.info("user: " + user);
+    
+    userRepository.save(user);
+
+    logger.info("Processed request: " + incomingRequest);
+  }
 }

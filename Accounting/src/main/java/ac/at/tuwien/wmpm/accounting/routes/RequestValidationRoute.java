@@ -15,22 +15,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class RequestValidationRoute extends RouteBuilder {
 
-    @Autowired
-    private RequestValidationProcessor requestValidationProcessor;
+  @Autowired
+  private RequestValidationProcessor requestValidationProcessor;
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestValidationRoute.class);
+  private static final Logger logger = LoggerFactory.getLogger(RequestValidationRoute.class);
 
-    @Override
-    public void configure() throws Exception {
-
-        from("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidation&routingKey=incomingRequestValidation&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
-            .routeId("RequestValidationRoute")
-            .log("from rabbitmq:incomingRequestValidation")
-            .unmarshal().json(JsonLibrary.Jackson, IncomingRequest.class)
-            .process(requestValidationProcessor)
-            .marshal().json(JsonLibrary.Jackson)
-            .to("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidationResponse&routingKey=incomingRequestValidationResponse&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
-            .log("to rabbitmq:incomingRequestValidationResponse");
-    }
+  @Override
+  public void configure() throws Exception {
+    logger.info("Validating request...");
+    from(
+        "rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidation&routingKey=incomingRequestValidation&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
+        .routeId("RequestValidationRoute")
+        .log("from rabbitmq:incomingRequestValidation")
+        .unmarshal()
+        .json(JsonLibrary.Jackson, IncomingRequest.class)
+        .process(requestValidationProcessor)
+        .marshal()
+        .json(JsonLibrary.Jackson)
+        .to("rabbitmq://localhost/expertCallCenterExchange?queue=incomingRequestValidationResponse&routingKey=incomingRequestValidationResponse&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
+        .log("to rabbitmq:incomingRequestValidationResponse");
+  }
 
 }

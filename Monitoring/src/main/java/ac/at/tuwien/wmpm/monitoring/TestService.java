@@ -14,15 +14,15 @@ import javax.annotation.PostConstruct;
 @Service
 public class TestService {
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+  @Autowired
+  private RabbitTemplate rabbitTemplate;
 
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(TestService.class);
+  /** The Constant logger. */
+  private static final Logger logger = LoggerFactory.getLogger(TestService.class);
 
-    @PostConstruct
-    private void onPostConstruct() {
+  @PostConstruct
+  private void onPostConstruct() {
+    logger.info("Monitoring Test Service...");
 
-
-    }
+  }
 }

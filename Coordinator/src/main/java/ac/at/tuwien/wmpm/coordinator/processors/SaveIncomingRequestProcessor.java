@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class SaveIncomingRequestProcessor implements Processor {
 
-    @Autowired
-    IncomingRequestRepository incomingRequestRepository;
+  @Autowired
+  IncomingRequestRepository incomingRequestRepository;
 
-    @Override
-    public void process(Exchange exchange) throws Exception {
-        IncomingRequest ir = (IncomingRequest) exchange.getIn().getBody();
-        incomingRequestRepository.save(ir);
-    }
+  @Override
+  public void process(Exchange exchange) throws Exception {
+    IncomingRequest ir = (IncomingRequest) exchange.getIn().getBody();
+    incomingRequestRepository.save(ir);
+  }
 }

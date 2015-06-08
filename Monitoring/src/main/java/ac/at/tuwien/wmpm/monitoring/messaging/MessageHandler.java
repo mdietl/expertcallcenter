@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageHandler {
 
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
+  /** The Constant logger. */
+  private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
-    public void handleMessage(Object message) {
-        logger.info("GOT MESSAGE:" + message.toString());
-    }
+  public void handleMessage(Object message) {
+    logger.info("GOT MESSAGE:" + message.toString());
+  }
 }

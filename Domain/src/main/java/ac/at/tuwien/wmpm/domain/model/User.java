@@ -8,38 +8,52 @@ import javax.persistence.Entity;
 @Entity
 public class User extends Account {
 
-    private int sentQuestions;
+  private int sentQuestions;
 
-    private int receivedAnswers;
+  private int receivedAnswers;
 
-    private int paidAnswers;
+  private int paidAnswers;
 
-    public User() {
-        super();
-    }
+  public User() {}
 
+  public User(String email) {
+    super.setEmail(email);
+  }
+  
+  public int getSentQuestions() {
+    return sentQuestions;
+  }
 
-    public int getSentQuestions() {
-        return sentQuestions;
-    }
+  public void setSentQuestions(int sentQuestions) {
+    this.sentQuestions = sentQuestions;
+  }
 
-    public void setSentQuestions(int sentQuestions) {
-        this.sentQuestions = sentQuestions;
-    }
+  public int getReceivedAnswers() {
+    return receivedAnswers;
+  }
 
-    public int getReceivedAnswers() {
-        return receivedAnswers;
-    }
+  public void setReceivedAnswers(int receivedAnswers) {
+    this.receivedAnswers = receivedAnswers;
+  }
 
-    public void setReceivedAnswers(int receivedAnswers) {
-        this.receivedAnswers = receivedAnswers;
-    }
+  public int getPaidAnswers() {
+    return paidAnswers;
+  }
 
-    public int getPaidAnswers() {
-        return paidAnswers;
-    }
-
-    public void setPaidAnswers(int paidAnswers) {
-        this.paidAnswers = paidAnswers;
-    }
+  public void setPaidAnswers(int paidAnswers) {
+    this.paidAnswers = paidAnswers;
+  }
+  
+  @Override
+  public String toString() {
+    return "User{"
+        + "email="
+        + getEmail()
+        + ", sentQuestions="
+        + sentQuestions
+        + ", receivedAnswers="
+        + receivedAnswers
+        + ", paidAnswers="
+        + paidAnswers + '}';
+  }
 }

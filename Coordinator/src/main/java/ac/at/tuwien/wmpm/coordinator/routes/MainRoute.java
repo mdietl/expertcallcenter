@@ -10,19 +10,17 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MainRoute extends RouteBuilder {
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(MainRoute.class);
-    @Override
-    public void configure() throws Exception {
+  /** The Constant logger. */
+  private static final Logger logger = LoggerFactory.getLogger(MainRoute.class);
 
-        from("timer://foo?fixedRate=true&period=10000")
-                .to("direct:audit");
+  @Override
+  public void configure() throws Exception {
+    logger.info("Main Route called...");
+    from("timer://foo?fixedRate=true&period=10000").to("direct:audit");
 
-        from("direct:audit")
-                .setBody(constant("HELLO WORLD 123")).convertBodyTo(String.class)
-                .to("direct:logme");
+    from("direct:audit").setBody(constant("HELLO WORLD 123")).convertBodyTo(String.class)
+        .to("direct:logme");
 
-        from("direct:logme")
-                .to("log:com.mdw360.SampleRoutes");
-    }
+    from("direct:logme").to("log:com.mdw360.SampleRoutes");
+  }
 }

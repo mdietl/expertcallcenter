@@ -27,6 +27,6 @@ public class CamelConfiguration {
         camelContext.addRoutes(incomingRequestRoute);
         camelContext.addRoutes(paymentRoute);
 
-        return camelContext;
-    }
+    return camelContext;
+  }
 }

@@ -18,25 +18,25 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("ac.at.tuwien.wmpm.domain.model")
 @EnableJpaRepositories({"ac.at.tuwien.wmpm.domain.repository"})
 @PropertySources({
-        @PropertySource(value = "classpath:default.properties", ignoreResourceNotFound = true),
-        @PropertySource(value = "classpath:custom.properties", ignoreResourceNotFound = true)
-})
+    @PropertySource(value = "classpath:default.properties", ignoreResourceNotFound = true),
+    @PropertySource(value = "classpath:custom.properties", ignoreResourceNotFound = true)})
 public class CoordinatorApp extends SpringBootServletInitializer {
 
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(CoordinatorApp.class);
+  /** The Constant logger. */
+  private static final Logger logger = LoggerFactory.getLogger(CoordinatorApp.class);
 
-    /**
-     * The main method.
-     *
-     * @param args the arguments
-     */
-    public static void main(String[] args) {
-        SpringApplication.run(CoordinatorApp.class, args);
-    }
+  /**
+   * The main method.
+   *
+   * @param args the arguments
+   */
+  public static void main(String[] args) {
+    logger.info("Starting Coordinator App...");
+    SpringApplication.run(CoordinatorApp.class, args);
+  }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(CoordinatorApp.class);
-    }
+  @Override
+  protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+    return application.sources(CoordinatorApp.class);
+  }
 }

@@ -22,7 +22,8 @@ public class PaymentRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("jetty:http://localhost:8888/paymentService")
+        //from("jetty:http://localhost:8888/paymentService")
+        from("restlet:http://localhost:8888/paymentService")
                 .routeId("paymentRoute")
                 .log("received payment");
     }

@@ -10,6 +10,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,6 +28,9 @@ import java.util.List;
 @SpringApplicationConfiguration(classes = ExpertsApp.class)
 public class InitDB {
 
+  /** The Constant logger. */
+  private static final Logger logger = LoggerFactory.getLogger(InitDB.class);
+  
   @Autowired
   ExpertRepository expertRepository;
 
@@ -36,6 +41,8 @@ public class InitDB {
   @Transactional
   public void initDataBase() {
 
+    logger.info("Experts InitDB...");
+    
     expertRepository.delete(expertRepository.findAll());
     categoryRepository.delete(categoryRepository.findAll());
 

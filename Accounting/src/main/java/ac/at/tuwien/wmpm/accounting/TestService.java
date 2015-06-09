@@ -22,7 +22,7 @@ public class TestService {
 
   @PostConstruct
   private void onPostConstruct() {
-    logger.info("TestService");
+    logger.info("Accounting TestService...");
     for (User u : userRepository.findAll()) {
       logger.info(u.getEmail());
     }

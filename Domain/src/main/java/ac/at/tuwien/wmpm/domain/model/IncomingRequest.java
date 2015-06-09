@@ -2,8 +2,8 @@ package ac.at.tuwien.wmpm.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -11,66 +11,33 @@ import java.util.UUID;
 
 /**
  * Created by dietl_ma on 09/05/15.
+ * Updated by sadrian on 10/05/15.
  */
 @Entity
-public class IncomingRequest {
-
-    @Id
-    @NotNull
-    @Column(unique = true)
-    private UUID id;
-
-    private String mail;
-
-    private String title;
+public class IncomingRequest extends Message {
 
     @Column(length = 10000)
     private String question;
 
-    private Boolean valid = false;
-
     private ArrayList<String> categories = new ArrayList<String>();
 
     private ArrayList<String> experts = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
+    private List<ExpertResponse> answers;
 
-    public IncomingRequest() {
-    }
-
+    public IncomingRequest() {super();}
+    
     public IncomingRequest(UUID id) {
-        this.id = id;
+      super.setId(id);
     }
-
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
+    
     public String getQuestion() {
-        return question;
+        return super.getContent();
     }
 
     public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
+        super.setContent(question);
     }
 
     public List<String> getCategories() {
@@ -100,28 +67,32 @@ public class IncomingRequest {
     public void addCategory(String category) {
         categories.add(category);
     }
-
-    public Boolean getValid() {
-        return valid;
+    
+    public List<ExpertResponse> getAnswers() {
+      return answers;
     }
-
-    public void setValid(Boolean valid) {
-        this.valid = valid;
+    
+    public void setAnswers(List<ExpertResponse> answers) {
+      this.answers = answers;
+    }
+  
+    public void addAnswer(ExpertResponse answer) {
+      answers.add(answer);
     }
 
     @Override
     public String toString() {
         return "IncomingRequest{"
                 + "id="
-                + id
+                + super.getId()
                 + ", mail='"
-                + mail
+                + super.getMail()
                 + '\''
                 + ", title='"
-                + title
+                + super.getTitle()
                 + '\''
                 + ", question='"
-                + question.substring(0, question.length() <= 15 ? question.length() : 15).replaceAll(
-                "(\\r|\\n)", "") + '\'' + ", valid=" + valid + ", categories=" + categories + '}';
+                + super.getContent().substring(0, super.getContent().length() <= 15 ? super.getContent().length() : 15).replaceAll(
+                "(\\r|\\n)", "") + '\'' + ", valid=" + super.getValid() + ", categories=" + categories + ", answers=" + answers + '}';
     }
 }

@@ -1,6 +1,7 @@
 package ac.at.tuwien.wmpm.domain.repository;
 
 import ac.at.tuwien.wmpm.domain.model.IncomingRequest;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

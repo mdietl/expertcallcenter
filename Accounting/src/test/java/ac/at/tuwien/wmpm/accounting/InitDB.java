@@ -2,10 +2,14 @@ package ac.at.tuwien.wmpm.accounting;
 
 import ac.at.tuwien.wmpm.domain.model.User;
 import ac.at.tuwien.wmpm.domain.repository.UserRepository;
+import ac.at.tuwien.wmpm.accounting.InitDB;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -17,30 +21,32 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringApplicationConfiguration(classes = AccountingApp.class)
 public class InitDB {
 
-    @Autowired
-    UserRepository userRepository;
+  /** The Constant logger. */
+  private static final Logger logger = LoggerFactory.getLogger(InitDB.class);
 
-    @Before
-    public void initDataBase() {
+  @Autowired
+  UserRepository userRepository;
 
-        userRepository.delete(userRepository.findAll());
+  @Before
+  public void initDataBase() {
+    
+    logger.info("Accounting InitDB...");
 
-        User newUser = new User();
-        int random = (int)(Math.random()*(10000000));
-        newUser.setEmail("dietl" + String.valueOf(random) + "@gmail.com");
-        userRepository.save(newUser);
-        newUser.setEmail("dietl" + String.valueOf(random+10) + "@gmail.com");
-        userRepository.save(newUser);
-        newUser.setEmail("dietl" + String.valueOf(random+20) + "@gmail.com");
-        userRepository.save(newUser);
-    }
+    userRepository.delete(userRepository.findAll());
 
+    User newUser = new User();
+    int random = (int) (Math.random() * (10000000));
+    newUser.setEmail("dietl" + String.valueOf(random) + "@gmail.com");
+    userRepository.save(newUser);
+    newUser.setEmail("dietl" + String.valueOf(random + 10) + "@gmail.com");
+    userRepository.save(newUser);
+    newUser.setEmail("dietl" + String.valueOf(random + 20) + "@gmail.com");
+    userRepository.save(newUser);
+  }
 
-
-    @Test
-    public void testEntries() throws Exception {
-        Assert.assertEquals(3, userRepository.count());
-
-    }
+  @Test
+  public void testEntries() throws Exception {
+    Assert.assertEquals(3, userRepository.count());
+  }
 
 }

@@ -1,6 +1,5 @@
 package ac.at.tuwien.wmpm.coordinator.processors;
 
-import ac.at.tuwien.wmpm.domain.model.Category;
 import ac.at.tuwien.wmpm.domain.model.IncomingRequest;
 import mx.bigdata.jcalais.CalaisClient;
 import mx.bigdata.jcalais.CalaisObject;

@@ -23,7 +23,7 @@ public class IncomingRequest extends Message {
 
     private ArrayList<String> experts = new ArrayList<>();
     
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
     private List<ExpertResponse> answers;
 
     public IncomingRequest() {super();}

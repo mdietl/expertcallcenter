@@ -1,5 +1,10 @@
 package ac.at.tuwien.wmpm.coordinator.routes;
 
+import java.util.ArrayList;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import ac.at.tuwien.wmpm.coordinator.processors.EnrichWithCategoriesProcessor;
 import ac.at.tuwien.wmpm.coordinator.processors.IncomingRequestProcessor;
 import ac.at.tuwien.wmpm.coordinator.processors.SaveIncomingRequestProcessor;
@@ -63,24 +68,38 @@ public class IncomingRequestRoute extends RouteBuilder {
         .routeId("RouteMailPoller")
         .log("from mail server")
         .log("check subject")
-        .to("jpa:" + ExpertResponse.class.getCanonicalName())
         .process(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
               logger.info("Scanning Incoming Requests...");
+              
               for(IncomingRequest ir : incomingRequestRepository.findAll()) {
                 logger.info("ID: " + ir.getId());
                 
                 if(exchange.getIn().getHeader("subject").toString().indexOf(ir.getId().toString()) >= 0) {
-                  ExpertResponse er = exchange.getIn().getBody(ExpertResponse.class);
+                  ExpertResponse er = new ExpertResponse(UUID.randomUUID());
+                  er.setTitle("### WMPM Response to [" + ir.getId().toString() + "] ###");
+                  er.setMail(parseFrom(exchange.getIn().getHeader("From").toString()));
+                  er.setAnswer(exchange.getIn().getBody(String.class));
+                  
+//                  IncomingRequest req = incomingRequestRepository.findById(ir.getId());
+                  er.setIncomingRequest(ir);
+                  
+                  //TODO should be checked
+                  er.setValid(true);
+
+                  logger.info("Expert Response processed, ER: " + er);
+
+                  exchange.getIn().setBody(er, ExpertResponse.class);
+                  exchange.getIn().setHeader("Subject", "### WMPM Response to [" + ir.getId().toString() + "] ###");
+                  
                   expertResponseRepository.save(er);
                   ir.addAnswer(er);
-
-                  exchange.getIn().setHeader("Subject", "### WMPM Response to [" + ir.getId().toString() + "] ###");
                 }
               }
             }
         })
+
         .log("New subject: ${header.subject}")
         .choice()
           .when(simple("${header.subject} regex '### WMPM Response to \\[(.*?)\\] ###'"))
@@ -176,41 +195,60 @@ public class IncomingRequestRoute extends RouteBuilder {
     // send answers to back to the user
     from("direct:returnResponses")
         .routeId("RouteExpertResponseBuilder")
-        .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                      for(ExpertResponse er : expertResponseRepository.findAll()) {
-                        logger.info("ID: " + er.toString());
-                      }
-                    }
-                })
-                
-//        .aggregate(simple("${header.subject} regex '### WMPM Response to \\[(.*?)\\] ###'"), new AggregationStrategy() {
-//              @Override
-//              public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
-//                if (oldExchange== null) {
-//                  return newExchange;
-//                }
-//                String oldBody= oldExchange.getIn().getBody(String.class);
-//                String newBody= newExchange.getIn().getBody(String.class);
-//                oldExchange.getIn().setBody(oldBody+ "\n\n" + newBody);
-//                return oldExchange;
-//              }
-//            })
-//        .completionTimeout(10000) //10 sek
-        
-        .removeHeaders("*")
-        .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        ExpertResponse er = (ExpertResponse) exchange.getIn().getBody();
 
-                        exchange.getIn().setHeader("To", StringUtils.join(er.getIncomingRequest().getMail(), ","));
-                        exchange.getIn().setHeader("Subject", constant("Reply from Expert Callcenter WMPM"));
-                    }
-                })
+        .aggregate(simple("${header.subject}"), new AggregationStrategy() {
+              @Override
+              public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
+                if (oldExchange != null) {
+                  oldExchange.getIn().removeHeaders("*");
+                
+                  oldExchange.getIn().setHeader("To", newExchange.getIn().getBody(ExpertResponse.class).getIncomingRequest().getMail());
+                  oldExchange.getIn().setHeader("Subject", constant("Reply from Expert Callcenter WMPM"));
+                  
+                  ExpertResponse oldBody= oldExchange.getIn().getBody(ExpertResponse.class);
+                  
+                  String oldAnswer= oldExchange.getIn().getBody(ExpertResponse.class).getAnswer();
+                  String newAnswer= newExchange.getIn().getBody(ExpertResponse.class).getAnswer();
+                  
+                  oldAnswer = oldAnswer + "\n\n" + newAnswer;
+                  oldBody.setAnswer(oldAnswer);
+                  oldExchange.getIn().setBody(oldBody);
+                  
+                  return oldExchange;
+                } else {
+                  newExchange.getIn().removeHeaders("*");
+                  
+                  newExchange.getIn().setHeader("To", newExchange.getIn().getBody(ExpertResponse.class).getIncomingRequest().getMail());
+                  newExchange.getIn().setHeader("Subject", constant("Reply from Expert Callcenter WMPM"));
+                  
+                  return newExchange;
+                }
+                
+              }
+            })
+        .completionSize(2)
+
         .transform()
-        .simple("You can find the answer of your question below!\n\n //${body.answers}// Your question:\n//${body.question}//")
+        .simple("You can find the answer(s) of your question below!\n\n ${body.answer} \n\nYour question:\n${body.incomingRequest.question}")
         .to(smtpCredentials);
+  }
+  
+  /**
+   * Parse email
+   * 
+   * @param from
+   * @return
+   */
+  private String parseFrom(String from) {
+
+    Pattern p =
+        Pattern.compile("\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b", Pattern.CASE_INSENSITIVE);
+    Matcher matcher = p.matcher(from);
+    ArrayList<String> emails = new ArrayList<String>();
+    while (matcher.find()) {
+      emails.add(matcher.group());
+    }
+
+    return emails.get(0);
   }
 }

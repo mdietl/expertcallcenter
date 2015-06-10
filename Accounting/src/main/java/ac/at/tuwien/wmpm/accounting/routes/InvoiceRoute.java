@@ -27,9 +27,15 @@ public class InvoiceRoute extends RouteBuilder {
         from("jpa://" + User.class.getCanonicalName() +"?consumeDelete=false&consumer.delay=30000")
             .routeId("InvoicePollingRoute")
             .log("from jpa:Users")
-            .process(invoiceProcessor).marshal()
-            .json(JsonLibrary.Jackson)
-            .to("rabbitmq://localhost/expertCallCenterExchange?queue=InvoiceRoute&routingKey=InvoiceRoute&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
-            .log("to rabbitmq:InvoiceRoute");
+            .process(invoiceProcessor)
+            .choice()
+                .when(simple("${body.amount} > 0"))
+                    .marshal()
+                    .json(JsonLibrary.Jackson)
+                    .to("rabbitmq://localhost/expertCallCenterExchange?queue=InvoiceRoute&routingKey=InvoiceRoute&exchangeType=topic&durable=true&autoDelete=false&BridgeEndpoint=true")
+                    .log("to rabbitmq:InvoiceRoute")
+                .otherwise()
+                    .log("no need to send invoice")
+                    .end();
     }
 }

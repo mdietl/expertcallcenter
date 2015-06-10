@@ -3,7 +3,6 @@ package ac.at.tuwien.wmpm.coordinator.configuration;
 import ac.at.tuwien.wmpm.coordinator.routes.IncomingRequestRoute;
 import ac.at.tuwien.wmpm.coordinator.routes.InvoiceSendingRoute;
 import ac.at.tuwien.wmpm.coordinator.routes.PaymentRoute;
-
 import org.apache.camel.spring.SpringCamelContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

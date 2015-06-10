@@ -1,5 +1,6 @@
 package ac.at.tuwien.wmpm.accounting.configuration;
 
+import ac.at.tuwien.wmpm.accounting.routes.PaymentReceiverRoute;
 import ac.at.tuwien.wmpm.accounting.routes.RequestValidationRoute;
 import org.apache.camel.spring.SpringCamelContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,14 @@ public class CamelConfiguration {
   @Autowired
   private RequestValidationRoute requestValidationRoute;
 
+  @Autowired
+  private PaymentReceiverRoute paymentReceiverRoute;
+
   @Bean
   public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
     SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
     camelContext.addRoutes(requestValidationRoute);
+    camelContext.addRoutes(paymentReceiverRoute);
 
     return camelContext;
   }

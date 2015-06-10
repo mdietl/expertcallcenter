@@ -28,24 +28,30 @@ public class PaymentProcessor implements Processor {
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
 
-        if(exchange.getIn().getHeader("id") != null) {
-            String id = (String) exchange.getIn().getHeader("id");
+        if (exchange.getIn().getHeader("mail") != null || exchange.getIn().getHeader("amount") == null) {
+            String mail = (String) exchange.getIn().getHeader("mail");
+            String amountStr = (String) exchange.getIn().getHeader("amount");
+
+            Payment payment = new Payment();
+            payment.setUserMail(mail);
+
             try {
-                int userId = Integer.parseInt(id);
-
-                Payment payment = new Payment();
-                payment.setUserId(userId);
-                exchange.getIn().setBody(payment, Payment.class);
-
-                response.setStatus(Status.SUCCESS_OK);
-                response.setEntity("Payment received from user["+userId+"]!", MediaType.TEXT_HTML);
-                //exchange.getOut().setBody(response); // cant set response, cant be serialized, duh
-                exchange.getOut().setBody("Payment received from user["+userId+"]!");
-                return;
+                int amount = Integer.parseInt(amountStr);
+                payment.setAmount(amount);
             }
             catch(NumberFormatException e) {
-
+                response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                exchange.getOut().setBody(response);
+                return;
             }
+
+            exchange.getIn().setBody(payment, Payment.class);
+
+//            response.setStatus(Status.SUCCESS_OK);
+//            response.setEntity("Payment received from user["+userId+"]!", MediaType.TEXT_HTML);
+            //exchange.getOut().setBody(response); // cant set response, cant be serialized, duh
+//            exchange.getOut().setBody("Payment received from user["+mail+"]!");
+            return;
         }
 
         response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);

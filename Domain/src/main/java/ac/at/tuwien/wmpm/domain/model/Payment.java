@@ -5,20 +5,30 @@ package ac.at.tuwien.wmpm.domain.model;
  */
 public class Payment {
 
-    private int userId;
-
-    public int getUserId() {
-        return userId;
+    public Payment() {
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public Payment(String userMail) {
+        this.userMail = userMail;
     }
 
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "userId=" + userId +
-                '}';
+    private String userMail;
+
+    private int amount;
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public String getUserMail() {
+        return userMail;
+    }
+
+    public void setUserMail(String userMail) {
+        this.userMail = userMail;
     }
 }

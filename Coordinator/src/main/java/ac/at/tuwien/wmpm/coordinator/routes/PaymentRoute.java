@@ -31,7 +31,7 @@ public class PaymentRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("restlet:http://localhost:8888/paymentService/{id}")
+        from("restlet:http://localhost:8888/paymentService/{mail}/{amount}")
             .routeId("paymentRoute")
             .log("received payment")
             .process(paymentProcessor)

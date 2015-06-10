@@ -1,5 +1,6 @@
 package ac.at.tuwien.wmpm.accounting.configuration;
 
+import ac.at.tuwien.wmpm.accounting.routes.InvoiceRoute;
 import ac.at.tuwien.wmpm.accounting.routes.PaymentReceiverRoute;
 import ac.at.tuwien.wmpm.accounting.routes.RequestValidationRoute;
 import org.apache.camel.spring.SpringCamelContext;
@@ -20,11 +21,15 @@ public class CamelConfiguration {
   @Autowired
   private PaymentReceiverRoute paymentReceiverRoute;
 
+  @Autowired
+  private InvoiceRoute invoiceRoute;
+
   @Bean
   public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
     SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
     camelContext.addRoutes(requestValidationRoute);
     camelContext.addRoutes(paymentReceiverRoute);
+    camelContext.addRoutes(invoiceRoute);
 
     return camelContext;
   }

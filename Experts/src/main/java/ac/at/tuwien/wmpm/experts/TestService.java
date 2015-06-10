@@ -51,6 +51,11 @@ public class TestService {
     categoryMathematics.setName("Mathematics");
     categoryRepository.save(categoryMathematics);
     
+    //default test category
+    Category categoryCamel = new Category();
+    categoryCamel.setName("Camel");
+    categoryRepository.save(categoryCamel);
+    
     Expert anna = new Expert();
     anna.setEmail("anna.sadriu@gmail.com");
     anna.getCategories().add(categoryProgramming);
@@ -65,6 +70,7 @@ public class TestService {
     sapolhei.getCategories().add(categoryTesting);
     sapolhei.getCategories().add(categoryDataBase);
     sapolhei.getCategories().add(categoryMathematics);
+    sapolhei.getCategories().add(categoryCamel);
     expertRepository.save(sapolhei);
     
     logger.info("Experts TestService...");

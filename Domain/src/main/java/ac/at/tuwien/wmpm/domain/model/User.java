@@ -14,6 +14,16 @@ public class User extends Account {
 
   private int paidAnswers;
 
+    public int getInvoicedAnswers() {
+        return invoicedAnswers;
+    }
+
+    public void setInvoicedAnswers(int invoicedAnswers) {
+        this.invoicedAnswers = invoicedAnswers;
+    }
+
+    private int invoicedAnswers;
+
   public User() {}
 
   public User(String email) {
@@ -43,17 +53,15 @@ public class User extends Account {
   public void setPaidAnswers(int paidAnswers) {
     this.paidAnswers = paidAnswers;
   }
-  
-  @Override
-  public String toString() {
-    return "User{"
-        + "email="
-        + getEmail()
-        + ", sentQuestions="
-        + sentQuestions
-        + ", receivedAnswers="
-        + receivedAnswers
-        + ", paidAnswers="
-        + paidAnswers + '}';
-  }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "sentQuestions=" + sentQuestions +
+                ", receivedAnswers=" + receivedAnswers +
+                ", paidAnswers=" + paidAnswers +
+                ", invoicedAnswers=" + invoicedAnswers +
+                '}';
+    }
+
 }
